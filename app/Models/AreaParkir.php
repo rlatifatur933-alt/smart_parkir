@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AreaParkir extends Model
 {
-    protected $table = 'areaparkir';
+    protected $table = 'tb_area_parkir';
     protected $primaryKey = 'id_area';
     protected $fillable = ['nama_area', 'kapasitas', 'terisi'];
     public $timestamps = false;
