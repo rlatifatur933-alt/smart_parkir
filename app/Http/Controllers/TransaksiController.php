@@ -87,6 +87,12 @@ class TransaksiController extends Controller
                 $area->decrement('terisi');
             }
 
+            \App\Models\LogAktivitas::create([
+                'id_user'   => auth()->id(), 
+                'aktivitas' => 'Memproses kendaraan keluar dengan ID Transaksi: ' . $id_parkir,
+                'waktu'     => now(),
+            ]);
+
             return response()->json(['message' => 'Kendaraan berhasil keluar!', 'total_biaya' => $biayaTotal]);
         }
     ];
