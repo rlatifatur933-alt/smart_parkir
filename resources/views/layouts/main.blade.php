@@ -144,7 +144,7 @@
                     <a href="/petugas/dashboard" class="nav-custom {{ Request::is('petugas/dashboard') ? 'active' : '' }}">
                         <i class="bi bi-speedometer2"></i> Dashboard Petugas
                     </a>
-                    <a href="#" class="nav-custom">
+                    <a href="/petugas/cetak" class="nav-custom">
                         <i class="bi bi-printer-fill"></i> Cetak Struk Parkir
                     </a>
                     <a href="#" class="nav-custom">

@@ -18,7 +18,7 @@
             <tbody>
                 @foreach($logs as $log)
                 <tr style="border-bottom: 1px solid #f1f5f9;">
-                    <td style="padding: 15px 20px; color: #64748b;">{{ $log->waktu }}</td>
+                    <td style="padding: 15px 20px; color: #64748b;">{{ $log->waktu_aktivitas }}</td>
                     <td style="padding: 15px 20px;">#USER-0{{ $log->id_user }}</td>
                     <td style="padding: 15px 20px; font-weight: 600;">{{ $log->aktivitas }}</td>
                 </tr>

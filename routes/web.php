@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\AreaParkir;
 use App\Models\Transaksi;
 use App\Models\Tarif;
+use App\Models\LogAktivitas;
+use App\Models\Kendaraan;
 
 Route::get('/', function () {
     return view('welcome');
@@ -130,12 +132,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Route kendaraan 
     Route::get('/admin/kendaraan', function () {
-        $kendaraan = \App\Models\Kendaraan::all();
+        $kendaraan = Kendaraan::all();
         return view('admin.kendaraan_index', compact('kendaraan'));
     })->name('admin.kendaraan.index');
     
     Route::post('/admin/kendaraan', function (\Illuminate\Http\Request $request) {
-        \App\Models\Kendaraan::create([
+        Kendaraan::create([
             'plat_nomor'      => $request->plat_nomor,
             'jenis_kendaraan' => $request->jenis_kendaraan,
             'warna'           => $request->warna,
@@ -147,23 +149,26 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     })->name('admin.kendaraan.store');
     
     Route::delete('/admin/kendaraan/{id}', function ($id) {
-        \App\Models\Kendaraan::where('id_kendaraan', $id)->delete();
+        Kendaraan::where('id_kendaraan', $id)->delete();
         return redirect()->back();
     })->name('admin.kendaraan.destroy');
 
     Route::get('/admin/log', function () {
-        $logs = \App\Models\LogAktivitas::orderBy('waktu', 'desc')->get();
+        $logs = LogAktivitas::orderBy('waktu_aktivitas', 'desc')->get();
         return view('admin.log_index', compact('logs'));
     })->name('admin.log.index');
 
 //Route petugas
+    
     Route::get('/petugas/dashboard', function () {
-        $kendaraanAktif = Transaksi::where('status', 'parkir')->count(); 
+        $transaksiAktif = Transaksi::where('status', 'masuk')->with('kendaraan')->get();
         
-        $transaksiAktif = Transaksi::with('kendaraan')->where('status', 'parkir')->get();
+        $kendaraanAktif = $transaksiAktif->count(); 
 
         return view('petugas.dashboard', compact('kendaraanAktif', 'transaksiAktif'));
     })->name('petugas.dashboard');
+
+    Route::get('/petugas/cetak_struk/{id}', [TransaksiController::class, 'cetakStruk'])->name('petugas.cetak.struk');
 
 // Route owner
     Route::get('/owner/dashboard', function () {
@@ -177,3 +182,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::post('/parkir/masuk', [TransaksiController::class, 'parkirMasuk'])->name('parkir.masuk');
 Route::post('/parkir/keluar/{id}', [TransaksiController::class, 'parkirKeluar'])->name('parkir.keluar');
+
+// Route untuk menampilkan Dashboard UI
+Route::get('/parkir', [TransaksiController::class, 'index'])->name('parkir.index');
+
+// Route untuk API (POST)
+Route::post('/parkir/masuk', [TransaksiController::class, 'parkirMasuk']);
+Route::post('/parkir/keluar/{id_parkir}', [TransaksiController::class, 'parkirKeluar']);

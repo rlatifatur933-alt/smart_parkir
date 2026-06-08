@@ -1,60 +1,57 @@
 @extends('layouts.main')
 
-@section('title', 'Dashboard Petugas')
-@section('page_title', 'Selamat Datang, Petugas Lapangan!')
-
 @section('content')
-    <style>
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 40px; }
-        .card { background-color: #1e293b; padding: 24px; border-radius: 16px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-        .card-info h3 { font-size: 14px; color: #94a3b8; font-weight: 500; margin-bottom: 8px; }
-        .card-info p { font-size: 28px; font-weight: bold; color: #f8fafc; }
-        .card-icon { width: 48px; height: 48px; background-color: rgba(34, 197, 94, 0.1); color: #22c55e; display: flex; justify-content: center; align-items: center; border-radius: 12px; font-size: 20px; }
-        
-        .data-section { background-color: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 24px; }
-        .section-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #f8fafc; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { color: #94a3b8; font-size: 14px; font-weight: 500; padding: 12px; border-bottom: 1px solid #334155; }
-        td { padding: 16px 12px; border-bottom: 1px solid #334155; font-size: 14px; color: #cbd5e1; }
-        tr:last-child td { border-bottom: none; }
-        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background-color: rgba(234, 179, 8, 0.1); color: #eab308; }
-    </style>
+<div style="padding: 20px;">
+    <h2>Dashboard Petugas Parkir</h2>
 
-    <section class="stats-grid">
-        <div class="card">
-            <div class="card-info">
-                <h3>Kendaraan Aktif Parkir</h3>
-                <p>{{ $kendaraanAktif ?? '0' }} Unit</p>
+    <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px;">
+        <h5>Input Kendaraan Masuk</h5>
+        <form action="{{ route('parkir.masuk') }}" method="POST">
+            @csrf
+            <div style="display: flex; gap: 10px; align-items: end;">
+                <input type="text" name="plat_nomor" placeholder="Plat Nomor" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <select name="jenis_kendaraan" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                    <option value="motor">Motor</option>
+                    <option value="mobil">Mobil</option>
+                </select>
+                <select name="id_area" class="form-control" required>
+                    <option value="">-- Pilih Area --</option>
+                    @foreach(\App\Models\AreaParkir::all() as $area)
+                        <option value="{{ $area->id_area }}">
+                            {{ $area->nama_area }} (Terisi: {{ $area->terisi }}/{{ $area->kapasitas }})
+                        </option>
+                    @endforeach
+                </select>
+                <button type="submit" style="padding: 8px 15px; background: #0284c7; color: white; border: none; border-radius: 4px; cursor: pointer;">Parkir Masuk</button>
             </div>
-            <div class="card-icon"><i class="fa-solid fa-car-side"></i></div>
-        </div>
-    </section>
+        </form>
+    </div>
 
-    <section class="data-section">
-        <div class="section-title"><i class="fa-solid fa-list-check" style="color: #22c55e;"></i> Kendaraan Aktif di Lapangan (Tabel Transaksi)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Plat Nomor</th>
-                    <th>Jenis Kendaraan</th>
-                    <th>Waktu Masuk</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($transaksiAktif ?? [] as $t)
-                <tr>
-                    <td><strong>{{ $t->kendaraan->plat_nomor ?? '-' }}</strong></td>
-                    <td>{{ $t->kendaraan->jenis_kendaraan ?? '-' }}</td>
-                    <td>{{ \Carbon\Carbon::parse($t->waktu_masuk)->format('H:i d/m/Y') }} WIB</td>
-                    <td><span class="status-badge">{{ $t->status }}</span></td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="4" style="text-align: center; color: #64748b;">Tidak ada kendaraan yang sedang parkir.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </section>
+    <table style="width: 100%; border-collapse: collapse; background: #fff;">
+        <thead style="background: #f8fafc;">
+            <tr>
+                <th style="padding: 12px; border: 1px solid #ddd;">Plat Nomor</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Jenis</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Waktu Masuk</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($transaksiAktif ?? [] as $t)
+            <tr>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ $t->kendaraan->plat_nomor ?? '-' }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ $t->kendaraan->jenis_kendaraan ?? '-' }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ \Carbon\Carbon::parse($t->waktu_masuk)->format('d/m/Y H:i') }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">
+                    <a href="{{ route('petugas.cetak.struk', $t->id_parkir) }}" target="_blank" style="padding: 5px 10px; background: #10b981; color: white; text-decoration: none; border-radius: 4px;">Cetak</a>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="4" style="padding: 20px; text-align: center; border: 1px solid #ddd;">Belum ada data kendaraan parkir.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 @endsection

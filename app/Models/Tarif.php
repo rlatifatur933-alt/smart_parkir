@@ -1,13 +1,13 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Tarif extends Model
 {
-    protected $table = 'tarif';
+    protected $table = 'tb_tarif';
     protected $primaryKey = 'id_tarif';
+    public $timestamps = true;
     protected $fillable = ['jenis_kendaraan', 'tarif_per_jam'];
-    public $timestamps = false; 
+
+    public function transaksis() { return $this->hasMany(Transaksi::class, 'id_tarif', 'id_tarif'); }
 }
