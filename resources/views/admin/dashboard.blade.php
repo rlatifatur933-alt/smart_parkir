@@ -1,75 +1,183 @@
 @extends('layouts.main')
 
 @section('title', 'Dashboard Admin')
-@section('page_title', 'Selamat Datang, Admin!')
+@section('page-title', 'Dashboard')
 
 @section('content')
-    <style>
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 40px; }
-        .card { background-color: #1e293b; padding: 24px; border-radius: 16px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-        .card-info h3 { font-size: 14px; color: #94a3b8; font-weight: 500; margin-bottom: 8px; }
-        .card-info p { font-size: 28px; font-weight: bold; color: #f8fafc; }
-        .card-icon { width: 48px; height: 48px; background-color: rgba(56, 189, 248, 0.1); color: #38bdf8; display: flex; justify-content: center; align-items: center; border-radius: 12px; font-size: 20px; }
-        
-        .data-section { background-color: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 24px; }
-        .section-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #f8fafc; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { color: #94a3b8; font-size: 14px; font-weight: 500; padding: 12px; border-bottom: 1px solid #334155; }
-        td { padding: 16px 12px; border-bottom: 1px solid #334155; font-size: 14px; color: #cbd5e1; }
-        tr:last-child td { border-bottom: none; }
-        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .status-badge.aktif { background-color: rgba(34, 197, 94, 0.1); color: #22c55e; }
-        .status-badge.nonaktif { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
-    </style>
-
-    <section class="stats-grid">
-        <div class="card">
-            <div class="card-info">
-                <h3>Total Pengguna Aplikasi</h3>
-                <p>{{ $totalUser ?? '0' }} User</p>
+<div class="row g-4 mb-4">
+    <!-- Total Area -->
+    <div class="col-md-3">
+        <div class="card card-stat">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Total Area Parkir</h6>
+                        <h2 class="mb-0">{{ $totalArea ?? 0 }}</h2>
+                        <small class="text-muted">Area tersedia</small>
+                    </div>
+                    <div class="stat-icon bg-gradient-primary">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                </div>
             </div>
-            <div class="card-icon"><i class="fa-solid fa-users"></i></div>
         </div>
-        <div class="card">
-            <div class="card-info">
-                <h3>Total Area Parkir</h3>
-                <p>{{ $totalArea ?? '0' }} Area</p>
+    </div>
+    
+    <!-- Kendaraan Masuk Hari Ini -->
+    <div class="col-md-3">
+        <div class="card card-stat">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Kendaraan Masuk</h6>
+                        <h2 class="mb-0">{{ $kendaraanMasuk ?? 0 }}</h2>
+                        <small class="text-muted">Hari ini</small>
+                    </div>
+                    <div class="stat-icon bg-gradient-success">
+                        <i class="fas fa-car"></i>
+                    </div>
+                </div>
             </div>
-            <div class="card-icon" style="color: #a855f7; background-color: rgba(168,85,247,0.1);"><i class="fa-solid fa-warehouse"></i></div>
         </div>
-    </section>
+    </div>
+    
+    <!-- Durasi Rata-rata -->
+    <div class="col-md-3">
+        <div class="card card-stat">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Durasi Rata-rata</h6>
+                        <h2 class="mb-0">{{ $durasiRata ?? 0 }}</h2>
+                        <small class="text-muted">Jam</small>
+                    </div>
+                    <div class="stat-icon bg-gradient-info">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pendapatan Hari Ini -->
+    <div class="col-md-3">
+        <div class="card card-stat">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Pendapatan Hari Ini</h6>
+                        <h2 class="mb-0">Rp {{ number_format($pendapatanHariIni ?? 0, 0, ',', '.') }}</h2>
+                        <small class="text-muted">Total</small>
+                    </div>
+                    <div class="stat-icon bg-gradient-warning">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <section class="data-section">
-        <div class="section-title"><i class="fa-solid fa-user-gear" style="color: #38bdf8;"></i> Manajemen Data Akun Terdaftar (Tabel User)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nama Lengkap</th>
-                    <th>Username</th>
-                    <th>Role Akses</th>
-                    <th>Status Akun</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($users ?? [] as $u)
-                <tr>
-                    <td><strong>{{ $u->nama_lengkap }}</strong></td>
-                    <td>{{ $u->username }}</td>
-                    <td><span style="color: #38bdf8;">{{ $u->role }}</span></td>
-                    <td>
-                        @if($u->status_aktif == 1)
-                            <span class="status-badge aktif">Aktif</span>
-                        @else
-                            <span class="status-badge nonaktif">Non-Aktif</span>
-                        @endif
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="4" style="text-align: center; color: #64748b;">Belum ada data user di database.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </section>
+<!-- Status Area Parkir -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card table-custom">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="fas fa-map-marker-alt text-primary"></i> Status Area Parkir</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    @forelse($areas as $area)
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0">{{ $area->nama_area }}</h6>
+                                    <span class="badge bg-{{ $area->terisi >= $area->kapasitas ? 'danger' : 'success' }} badge-custom">
+                                        {{ $area->terisi >= $area->kapasitas ? 'Penuh' : 'Tersedia' }}
+                                    </span>
+                                </div>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-{{ $area->terisi >= $area->kapasitas ? 'danger' : 'success' }}" 
+                                         role="progressbar" 
+                                         style="width: {{ ($area->terisi / $area->kapasitas) * 100 }}%">
+                                        {{ $area->terisi }} / {{ $area->kapasitas }}
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Terisi: {{ $area->terisi }}</small>
+                                    <small class="text-success">Tersedia: {{ $area->kapasitas - $area->terisi }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="col-12 text-center text-muted py-5">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>Belum ada data area parkir</p>
+                        <a href="{{ route('area.create') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Tambah Area
+                        </a>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transaksi Terakhir -->
+<div class="row">
+    <div class="col-12">
+        <div class="card table-custom">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-history text-primary"></i> Transaksi Terakhir</h5>
+                <a href="{{ route('parkir.index') }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i> Lihat Semua
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID Parkir</th>
+                                <th>Plat Nomor</th>
+                                <th>Jenis</th>
+                                <th>Waktu Masuk</th>
+                                <th>Area</th>
+                                <th>Status</th>
+                                <th>Biaya</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($transaksiTerakhir as $transaksi)
+                            <tr>
+                                <td><strong>#{{ $transaksi->id_parkir }}</strong></td>
+                                <td>{{ $transaksi->kendaraan->plat_nomor ?? '-' }}</td>
+                                <td>{{ ucfirst($transaksi->kendaraan->jenis_kendaraan ?? '-') }}</td>
+                                <td>{{ $transaksi->waktu_masuk->format('d/m/Y H:i') }}</td>
+                                <td>{{ $transaksi->area->nama_area ?? '-' }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $transaksi->status === 'masuk' ? 'success' : 'secondary' }} badge-custom">
+                                        {{ ucfirst($transaksi->status) }}
+                                    </span>
+                                </td>
+                                <td>Rp {{ number_format($transaksi->biaya_total, 0, ',', '.') }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    <i class="fas fa-inbox fa-2x mb-2"></i>
+                                    <p class="mb-0">Belum ada transaksi</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
