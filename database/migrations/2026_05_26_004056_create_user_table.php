@@ -6,13 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tb_user', function (Blueprint $table) {
-            $table->id('id_user'); // Primary Key int(11)
+            $table->id('id_user');
             $table->string('nama_lengkap', 50);
             $table->string('username', 50)->unique();
             $table->string('password', 100);
@@ -22,11 +19,8 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('tb_user');
     }
 };
