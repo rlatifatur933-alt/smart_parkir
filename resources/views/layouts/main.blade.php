@@ -213,47 +213,70 @@
             <small>{{ ucfirst(auth()->user()->role ?? 'user') }}</small>
         </div>
         
-        <nav class="nav-custom flex-column">
-            <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                <i class="fas fa-home"></i> Dashboard
+        <nav class="nav-custom flex-column mt-3">
+            {{-- Dashboard untuk Admin & Owner --}}
+            @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
+            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            @endif
+            
+            {{-- Menu Petugas --}}
+            @if(auth()->user()->role === 'petugas')
+            <a class="nav-link {{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}" href="{{ route('petugas.dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
             
-            @if(auth()->check())
             <a class="nav-link {{ request()->routeIs('parkir.*') ? 'active' : '' }}" href="{{ route('parkir.index') }}">
-                <i class="fas fa-car"></i> Transaksi Parkir
+                <i class="fas fa-parking"></i> Transaksi Parkir
+            </a>
+            @endif
+            
+            {{-- Menu Khusus Owner --}}
+            @if(auth()->user()->role === 'owner')
+                <a class="nav-link {{ request()->routeIs('owner.log') ? 'active' : '' }}" href="{{ route('owner.log') }}">
+                    <i class="fas fa-wallet"></i> Log Pemasukan
+                </a>
+            @endif
+
+            {{-- Menu Khusus Admin (Tarif & Area) --}}
+            @if(auth()->user()->role === 'admin')
+                <a class="nav-link {{ request()->routeIs('admin.tarif.*') ? 'active' : '' }}" href="{{ route('admin.tarif.index') }}">
+                    <i class="fas fa-money-bill-wave"></i> Tarif Parkir
+                </a>
+
+                <a class="nav-link {{ request()->routeIs('admin.area.*') ? 'active' : '' }}" href="{{ route('admin.area.index') }}">
+                    <i class="fas fa-map-marker-alt"></i> Area Parkir
+                </a>
+            @endif
+            
+            {{-- Menu Khusus Admin --}}
+            @if(auth()->user()->role === 'admin')
+            <a class="nav-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}" href="{{ route('admin.user.index') }}">
+                <i class="fas fa-users"></i> Manajemen User
             </a>
             
-            <a class="nav-link {{ request()->routeIs('kendaraan.*') ? 'active' : '' }}" href="{{ route('kendaraan.index') }}">
+            <a class="nav-link {{ request()->routeIs('admin.kendaraan.*') ? 'active' : '' }}" href="{{ route('admin.kendaraan.index') }}">
                 <i class="fas fa-motorcycle"></i> Data Kendaraan
             </a>
             
-            @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
-            <a class="nav-link {{ request()->routeIs('tarif.*') ? 'active' : '' }}" href="{{ route('tarif.index') }}">
-                <i class="fas fa-money-bill-wave"></i> Tarif Parkir
-            </a>
-            
-            <a class="nav-link {{ request()->routeIs('area.*') ? 'active' : '' }}" href="{{ route('area.index') }}">
-                <i class="fas fa-map-marker-alt"></i> Area Parkir
-            </a>
-            
-            <a class="nav-link {{ request()->routeIs('user.*') ? 'active' : '' }}" href="{{ route('user.index') }}">
-                <i class="fas fa-users"></i> Manajemen User
-            </a>
-            @endif
-            
-            <a class="nav-link {{ request()->routeIs('log.*') ? 'active' : '' }}" href="{{ route('log.index') }}">
+            <a class="nav-link {{ request()->routeIs('admin.log.*') ? 'active' : '' }}" href="{{ route('admin.log.index') }}">
                 <i class="fas fa-history"></i> Log Aktivitas
             </a>
             @endif
-            
-            <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
-            
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="nav-link w-100 text-start border-0 bg-transparent text-white">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </form>
+
+            <!-- Logout Button dengan Styling Gradient -->
+            <div class="sidebar-footer mt-auto p-3 border-top border-secondary">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger w-100">
+                        <i class="fas fa-power-off me-2"></i>Logout
+                    </button>
+                </form>
+                <small class="text-muted d-block text-center mt-2">
+                    &copy; {{ date('Y') }} Smart Parkir
+                </small>
+            </div>  
         </nav>
     </div>
     

@@ -1,5 +1,8 @@
 @extends('layouts.main')
 
+@section('title', 'Tarif Parkir')
+@section('page-title', 'Tarif Parkir')
+
 @section('content')
 <div style="padding: 20px; font-family: 'Segoe UI', Roboto, sans-serif; animation: fadeIn 0.4s ease;">
     

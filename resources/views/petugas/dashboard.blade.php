@@ -4,27 +4,47 @@
 <div style="padding: 20px;">
     <h2>Dashboard Petugas Parkir</h2>
 
-    <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px;">
-        <h5>Input Kendaraan Masuk</h5>
-        <form action="{{ route('parkir.masuk') }}" method="POST">
-            @csrf
-            <div style="display: flex; gap: 10px; align-items: end;">
-                <input type="text" name="plat_nomor" placeholder="Plat Nomor" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                <select name="jenis_kendaraan" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                    <option value="motor">Motor</option>
-                    <option value="mobil">Mobil</option>
-                </select>
-                <select name="id_area" class="form-control" required>
-                    <option value="">-- Pilih Area --</option>
-                    @foreach(\App\Models\AreaParkir::all() as $area)
-                        <option value="{{ $area->id_area }}">
-                            {{ $area->nama_area }} (Terisi: {{ $area->terisi }}/{{ $area->kapasitas }})
-                        </option>
-                    @endforeach
-                </select>
-                <button type="submit" style="padding: 8px 15px; background: #0284c7; color: white; border: none; border-radius: 4px; cursor: pointer;">Parkir Masuk</button>
+    <!-- Statistik Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h3>{{ $transaksiAktif->count() }}</h3>
+                    <p>Kendaraan Parkir</p>
+                </div>
             </div>
-        </form>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h3>{{ \App\Models\AreaParkir::sum('kapasitas') - \App\Models\AreaParkir::sum('terisi') }}</h3>
+                    <p>Slot Tersedia</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h3>{{ \App\Models\AreaParkir::count() }}</h3>
+                    <p>Total Area</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h3>{{ \Carbon\Carbon::now()->format('H:i') }}</h3>
+                    <p>Waktu Sekarang</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access Button -->
+    <div class="mb-4">
+        <a href="{{ route('parkir.index') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-plus-circle me-2"></i>Input Kendaraan Masuk
+        </a>
     </div>
 
     <table style="width: 100%; border-collapse: collapse; background: #fff;">

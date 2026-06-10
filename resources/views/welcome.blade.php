@@ -7,81 +7,89 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #111827 0%, #030712 50%, #1f2937 100%);
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c3e50 50%, #34495e 100%);
             min-height: 100vh;
             color: #ffffff;
             display: flex;
             align-items: center;
         }
         .badge-update {
-            background: linear-gradient(to right, #f59e0b, #d97706);
-            color: #000;
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: #ffffff;
             font-size: 0.75rem;
             font-weight: bold;
             letter-spacing: 1px;
             padding: 6px 16px;
             border-radius: 50px;
             display: inline-block;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4);
         }
         .text-gradient {
-            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            background: linear-gradient(to right, #3498db, #5dade2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .login-card {
-            background: rgba(31, 41, 55, 0.4);
+            background: rgba(44, 62, 80, 0.95);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(75, 85, 99, 0.4);
+            border: 1px solid rgba(52, 152, 219, 0.3);
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        .btn-role {
-            background: rgba(17, 24, 39, 0.6);
+        .btn-login-main {
+            background: linear-gradient(to right, #3498db, #2980b9);
             color: #ffffff;
-            border: 1px solid rgba(75, 85, 99, 0.5);
+            border: none;
             border-radius: 12px;
-            padding: 15px;
-            text-align: left;
+            padding: 20px;
+            text-align: center;
             transition: all 0.3s ease;
             width: 100%;
-            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
         }
-        .btn-role:hover {
-            background: linear-gradient(to right, #f59e0b, #amber-500);
-            background-color: #f59e0b;
-            color: #000000 !important;
-            border-color: transparent;
+        .btn-login-main:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);
-        }
-        .btn-role:hover .role-title {
-            color: #000000 !important;
-        }
-        .btn-role:hover .role-desc {
-            color: rgba(0, 0, 0, 0.7) !important;
-        }
-        .btn-role:hover .arrow {
-            color: #000000 !important;
-        }
-        .role-title {
-            font-weight: 600;
-            margin-bottom: 2px;
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.6);
             color: #ffffff;
+            background: linear-gradient(to right, #5dade2, #3498db);
         }
-        .role-desc {
-            font-size: 0.8rem;
-            color: #9ca3af;
-            margin-bottom: 0;
+        .btn-login-main .arrow {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
         }
-        .arrow {
-            color: #6b7280;
-            font-weight: bold;
-            font-size: 1.2rem;
+        .btn-login-main:hover .arrow {
+            transform: translateX(5px);
+        }
+        .info-box {
+            background: rgba(52, 73, 94, 0.6);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .info-box p {
+            color: #bdc3c7;
+            font-size: 0.85rem;
+            margin: 0;
+            text-align: center;
+        }
+        .text-muted {
+            color: #95a5a6 !important;
+        }
+        .fw-bold {
+            color: #ecf0f1;
+        }
+        h3.fw-bold {
+            color: #ffffff;
         }
     </style>
 </head>
@@ -92,7 +100,7 @@
             
             <div class="col-lg-6 text-start">
                 <div class="mb-4">
-                    <span class="badge-update text-uppercase">🚀 V2.0 New Update</span>
+                    <span class="badge-update text-uppercase">Welcome</span>
                 </div>
                 <h1 class="display-4 fw-black mb-3 text-white">
                     Sistem <span class="text-gradient">Smart Parkir</span>
@@ -112,45 +120,31 @@
             <div class="col-lg-5 offset-lg-1">
                 <div class="login-card">
                     <div class="text-center mb-4">
-                        <h3 class="fw-bold text-white mb-1">Selamat Datang</h3>
-                        <p class="text-muted small">Silakan pilih akses masuk sistem sesuai role Anda.</p>
+                        <div class="mb-3">
+                            <span style="font-size: 4rem;">🔐</span>
+                        </div>
+                        <h3 class="fw-bold text-white mb-2">Selamat Datang</h3>
+                        <p class="text-muted small mb-0">Silakan login untuk mengakses sistem</p>
                     </div>
 
-                    <div class="login-card">
-    
-                        <a href="{{ route('login', ['role_akses' => 'admin']) }}" class="btn btn-role text-decoration-none">
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="fs-3">🔑</span>
-                                <div>
-                                    <div class="role-title">Masuk sebagai Admin</div>
-                                    <div class="role-desc">Kelola data user & konfigurasi utama</div>
-                                </div>
-                            </div>
-                            <span class="arrow">&rarr;</span>
-                        </a>
+                    <!-- SATU TOMBOL LOGIN UNTUK SEMUA ROLE -->
+                    <a href="{{ route('login') }}" class="btn-login-main">
+                        <span style="font-size: 1.5rem;">🚀</span>
+                        <span>LOGIN SISTEM</span>
+                        <span class="arrow">→</span>
+                    </a>
 
-                        <a href="{{ route('login', ['role_akses' => 'petugas']) }}" class="btn btn-role text-decoration-none mt-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="fs-3">🧑‍✈️</span>
-                                <div>
-                                    <div class="role-title">Masuk sebagai Petugas</div>
-                                    <div class="role-desc">Input & monitoring data parkir lapangan</div>
-                                </div>
-                            </div>
-                            <span class="arrow">&rarr;</span>
-                        </a>
+                    <div class="info-box">
+                        <p>
+                            <i class="fas fa-info-circle"></i>
+                            Sistem akan otomatis mengarahkan Anda ke dashboard sesuai role akun Anda
+                        </p>
+                    </div>
 
-                        <a href="{{ route('login', ['role_akses' => 'owner']) }}" class="btn btn-role text-decoration-none mt-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="fs-3">📊</span>
-                                <div>
-                                    <div class="role-title">Masuk sebagai Owner</div>
-                                    <div class="role-desc">Pantau laporan pendapatan & statistik</div>
-                                </div>
-                            </div>
-                            <span class="arrow">&rarr;</span>
-                        </a>
-
+                    <div class="text-center mt-4">
+                        <small class="text-muted">
+                            © {{ date('Y') }} Smart Parkir System. All rights reserved.
+                        </small>
                     </div>
                 </div>
             </div>
@@ -158,10 +152,6 @@
         </div>
     </div>
 
-    <script>
-        function setRole(roleName) {
-            document.getElementById('role_akses').value = roleName;
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

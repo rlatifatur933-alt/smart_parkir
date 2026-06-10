@@ -1,5 +1,8 @@
 @extends('layouts.main')
 
+@section('title', 'Manajemen User')
+@section('page-title', 'Manajemen User') 
+
 @section('content')
 <div style="padding: 20px; font-family: 'Segoe UI', Roboto, sans-serif; animation: fadeIn 0.4s ease;">
     

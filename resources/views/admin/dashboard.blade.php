@@ -115,7 +115,7 @@
                     <div class="col-12 text-center text-muted py-5">
                         <i class="fas fa-inbox fa-3x mb-3"></i>
                         <p>Belum ada data area parkir</p>
-                        <a href="{{ route('area.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('admin.area.index') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Tambah Area
                         </a>
                     </div>

@@ -4,56 +4,93 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\LogAktivitas;
 
 class AuthController extends Controller
 {
-    // 1. Fungsi untuk menampilkan halaman login gelap yang kamu buat tadi
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // 2. Fungsi untuk mengecek username & password asli (Bcrypt) dari form login
     public function login(Request $request)
     {
-        // Validasi input form dulu
-        $kredensial = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-            'role_akses' => 'required'
+        // Validasi input
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
         ]);
 
-        // Proses login otomatis mencocokkan password ter-enkripsi di database
-        $sukses = Auth::attempt([
-            'username' => $kredensial['username'],
-            'password' => $kredensial['password'],
-            'role'     => $kredensial['role_akses']
-        ]);
+        // Cari user berdasarkan username
+        $user = User::where('username', $request->username)->first();
 
-        if ($sukses) {
-            $request->session()->regenerate();
-
-            // Pindahkan ke dashboard sesuai role masing-masing
-            $role = Auth::user()->role;
-            if ($role === 'admin') {
-                return redirect()->intended('/admin/dashboard');
-            } elseif ($role === 'petugas') {
-                return redirect()->intended('/petugas/dashboard');
-            } elseif ($role === 'owner') {
-                return redirect()->intended('/owner/dashboard');
-            }
+        // Cek user ada atau tidak
+        if (!$user) {
+            return back()->with('loginError', 'Username tidak ditemukan!');
         }
 
-        // Kalau gagal login, balikin ke form login dengan pesan error kustom
-        return back()->with('loginError', 'Username, password, atau role akses salah!');
+        // Cek password
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->with('loginError', 'Password salah!');
+        }
+
+        // Cek status aktif
+        if ($user->status_aktif != 1) {
+            return back()->with('loginError', 'Akun Anda tidak aktif. Hubungi administrator.');
+        }
+
+        // Cek role_akses dari form (jika ada)
+        $roleAkses = $request->input('role_akses');
+        
+        // Jika ada role_akses, pastikan sesuai dengan role user
+        if ($roleAkses && $user->role !== $roleAkses) {
+            return back()->with('loginError', 'Akun ini bukan role ' . ucfirst($roleAkses) . '!');
+        }
+
+        // Login user
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        // Catat log aktivitas
+        LogAktivitas::create([
+            'id_user' => $user->id_user,
+            'aktivitas' => 'Login ke sistem sebagai ' . $user->role,
+            'waktu_aktivitas' => now(),
+        ]);
+
+        // Redirect berdasarkan role
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->role === 'petugas') {
+            return redirect()->route('petugas.dashboard');
+        } elseif ($user->role === 'owner') {
+            return redirect()->route('owner.dashboard');
+        }
+
+        return redirect('/');
     }
 
-    // 3. Fungsi Logout
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        
+        if ($user) {
+            LogAktivitas::create([
+                'id_user' => $user->id_user,
+                'aktivitas' => 'Logout dari sistem',
+                'waktu_aktivitas' => now(),
+            ]);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }
