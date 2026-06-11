@@ -264,19 +264,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Header (TANPA tombol Tambah Kendaraan) -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col-md-12">
-                <h2><i class="fas fa-motorcycle me-2"></i>Manajemen Kendaraan</h2>
-                <p>Kelola database kendaraan yang terdaftar dalam sistem</p>
-                <small class="text-white-50">
-                    <i class="fas fa-info-circle me-1"></i>
-                    Kendaraan baru diinput otomatis oleh petugas saat transaksi parkir
-                </small>
-            </div>
-        </div>
-    </div>
 
     <!-- Statistik Cards -->
     <div class="row">

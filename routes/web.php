@@ -242,10 +242,39 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Route owner
     
     Route::middleware('auth')->prefix('owner')->name('owner.')->group(function () {
-        
-        // Dashboard Owner - Redirect ke Log Pemasukan
+            
+        // Dashboard Owner
         Route::get('/dashboard', function () {
-            return redirect()->route('owner.log');
+            $areas = AreaParkir::all();
+            
+            $areaStats = $areas->map(function($area) {
+                $totalPendapatan = Transaksi::where('id_area', $area->id_area)
+                    ->where('status', 'keluar')
+                    ->sum('biaya_total');
+                
+                $totalTransaksi = Transaksi::where('id_area', $area->id_area)
+                    ->where('status', 'keluar')
+                    ->count();
+                
+                $kendaraanAktif = Transaksi::where('id_area', $area->id_area)
+                    ->where('status', 'masuk')
+                    ->count();
+                
+                return [
+                    'area' => $area,
+                    'pendapatan' => $totalPendapatan,
+                    'transaksi' => $totalTransaksi,
+                    'aktif' => $kendaraanAktif
+                ];
+            });
+            
+            $totalPendapatan = Transaksi::where('status', 'keluar')->sum('biaya_total');
+            $transaksiSelesai = Transaksi::whereNotNull('waktu_keluar')
+                ->orderBy('waktu_keluar', 'desc')
+                ->take(10)
+                ->get();
+        
+            return view('owner.dashboard', compact('areaStats', 'totalPendapatan', 'transaksiSelesai'));
         })->name('dashboard');
         
         // Log Aktivitas Pemasukan
@@ -253,32 +282,26 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
             $query = Transaksi::with(['kendaraan', 'area', 'user'])
                 ->orderBy('created_at', 'desc');
             
-            // Filter tanggal
             if (request('start_date')) {
                 $query->whereDate('created_at', '>=', request('start_date'));
             }
             if (request('end_date')) {
                 $query->whereDate('created_at', '<=', request('end_date'));
             }
-            
-            // Filter status
             if (request('status')) {
                 $query->where('status', request('status'));
             }
             
             $transaksis = $query->get();
             
-            // Statistik
             $totalPendapatan = Transaksi::where('status', 'keluar')->sum('biaya_total');
             $pendapatanHariIni = Transaksi::where('status', 'keluar')
-                ->whereDate('created_at', today())
-                ->sum('biaya_total');
+                ->whereDate('created_at', today())->sum('biaya_total');
             $pendapatanMingguIni = Transaksi::where('status', 'keluar')
                 ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
                 ->sum('biaya_total');
             $pendapatanBulanIni = Transaksi::where('status', 'keluar')
-                ->whereMonth('created_at', now()->month)
-                ->sum('biaya_total');
+                ->whereMonth('created_at', now()->month)->sum('biaya_total');
             
             return view('owner.log_index', compact(
                 'transaksis',

@@ -215,7 +215,7 @@
         
         <nav class="nav-custom flex-column mt-3">
             {{-- Dashboard untuk Admin & Owner --}}
-            @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
+            @if(auth()->user()->role === 'admin')
             <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
@@ -234,6 +234,9 @@
             
             {{-- Menu Khusus Owner --}}
             @if(auth()->user()->role === 'owner')
+                <a class="nav-link {{ request()->routeIs('owner.dashboard') ? 'active' : '' }}" href="{{ route('owner.dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
                 <a class="nav-link {{ request()->routeIs('owner.log') ? 'active' : '' }}" href="{{ route('owner.log') }}">
                     <i class="fas fa-wallet"></i> Log Pemasukan
                 </a>
