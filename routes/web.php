@@ -117,6 +117,19 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         return redirect('/admin/tarif')->with('sukses', 'Tarif berhasil ditambah!');
     })->name('admin.tarif.store');
 
+    Route::put('/admin/tarif/{id}', function (\Illuminate\Http\Request $request, $id) {
+        $tarif = Tarif::where('id_tarif', $id)->firstOrFail();
+        
+        $validated = $request->validate([
+            'jenis_kendaraan' => 'required|string',
+            'tarif_per_jam' => 'required|numeric|min:0',
+        ]);
+        
+        $tarif->update($validated);
+        
+        return redirect('/admin/tarif')->with('sukses', 'Tarif berhasil diperbarui!');
+    })->name('admin.tarif.update');
+
     Route::delete('/admin/tarif/{id}', function ($id) {
         Tarif::where('id_tarif', $id)->delete();
         return redirect()->back()->with('sukses', 'Tarif berhasil dihapus!');
@@ -132,12 +145,37 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         \App\Models\AreaParkir::create([
             'nama_area' => $request->nama_area,
             'kapasitas' => $request->kapasitas,
-            'terisi'    => 0, // Default awal 0
+            'terisi'    => 0,
         ]);
         return redirect('/admin/area')->with('sukses', 'Area parkir berhasil ditambahkan!');
     })->name('admin.area.store');
 
+    // ✅ TAMBAHKAN ROUTE PUT DI SINI (SEBELUM DELETE)
+    Route::put('/admin/area/{id}', function (\Illuminate\Http\Request $request, $id) {
+        $area = \App\Models\AreaParkir::where('id_area', $id)->firstOrFail();
+        
+        $validated = $request->validate([
+            'nama_area' => 'required|string|max:100',
+            'kapasitas' => 'required|integer|min:1',
+        ]);
+        
+        // Cek apakah kapasitas baru kurang dari yang terisi
+        if ($request->kapasitas < $area->terisi) {
+            return redirect()->back()->with('error', 'Kapasitas tidak boleh kurang dari kendaraan yang sedang parkir (' . $area->terisi . ')');
+        }
+        
+        $area->update($validated);
+        
+        return redirect('/admin/area')->with('sukses', 'Area parkir berhasil diperbarui!');
+    })->name('admin.area.update');
+
     Route::delete('/admin/area/{id}', function ($id) {
+        $area = \App\Models\AreaParkir::where('id_area', $id)->first();
+        
+        if ($area && $area->terisi > 0) {
+            return redirect()->back()->with('error', 'Area tidak bisa dihapus karena masih ada kendaraan yang parkir!');
+        }
+        
         \App\Models\AreaParkir::where('id_area', $id)->delete();
         return redirect()->back()->with('sukses', 'Area parkir berhasil dihapus!');
     })->name('admin.area.destroy');
