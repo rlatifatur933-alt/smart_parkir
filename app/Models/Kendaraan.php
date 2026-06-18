@@ -32,4 +32,10 @@ class Kendaraan extends Model
     { 
         return $this->hasMany(Transaksi::class, 'id_kendaraan', 'id_kendaraan'); 
     }
+
+    public function transaksiAktif()
+    {
+        return $this->hasMany(\App\Models\Transaksi::class, 'id_kendaraan', 'id_kendaraan')
+                    ->where('status', 'masuk');
+    }
 }

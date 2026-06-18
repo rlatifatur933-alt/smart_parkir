@@ -29,7 +29,7 @@
                             <h3 class="mb-2 fw-bold" style="color: #1e3a5f;">
                                 Rp {{ number_format($stat['pendapatan'], 0, ',', '.') }}
                             </h3>
-                            <div class="d-flex flex-column gap-1 small">
+                            <div class="d-flex flex-column gap-1 small mb-3">
                                 <span class="text-muted">
                                     <i class="fas fa-check-circle text-success me-1"></i>
                                     {{ $stat['transaksi'] }} Transaksi
@@ -39,6 +39,13 @@
                                     {{ $stat['aktif'] }} Sedang Parkir
                                 </span>
                             </div>
+                            
+                            <!-- TOMBOL DETAIL (BARU) -->
+                            <a href="{{ route('owner.area.detail', $stat['area']->id_area) }}" 
+                               class="btn btn-sm w-100" 
+                               style="background: #8b5cf6; color: white; border: none; font-weight: 600; border-radius: 8px; padding: 8px 16px; transition: all 0.2s;">
+                                <i class="fas fa-eye me-1"></i> Detail Area
+                            </a>
                         </div>
                         <div class="stat-icon ms-3">
                             <i class="fas fa-wallet"></i>
@@ -117,10 +124,10 @@
                                         <strong>#{{ $ts->id_parkir }}</strong>
                                     </td>
                                     <td class="px-4 py-3">
-                                        {{ \Carbon\Carbon::parse($ts->waktu_masuk)->format('H:i d/m/Y') }}
+                                        {{ \Carbon\Carbon::parse($ts->waktu_masuk)->format('d/m/Y H:i') }}
                                     </td>
                                     <td class="px-4 py-3">
-                                        {{ \Carbon\Carbon::parse($ts->waktu_keluar)->format('H:i d/m/Y') }}
+                                        {{ \Carbon\Carbon::parse($ts->waktu_keluar)->format('d/m/Y H:i') }}
                                     </td>
                                     <td class="px-4 py-3">
                                         <span class="badge bg-info">{{ $ts->durasi_jam ?? '0' }} Jam</span>
@@ -159,6 +166,12 @@
         background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
         color: white;
         flex-shrink: 0;
+    }
+    
+    .btn-sm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        color: white;
     }
 </style>
 @endsection

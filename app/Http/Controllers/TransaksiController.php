@@ -15,8 +15,8 @@ class TransaksiController extends Controller
 
     public function index()
     {
-        $areas = \App\Models\AreaParkir::all();
-        $transaksiAktif = \App\Models\Transaksi::with(['kendaraan', 'area', 'tarif'])
+        $areas = AreaParkir::all();
+        $transaksiAktif = Transaksi::with(['kendaraan', 'area', 'tarif'])
             ->where('status', 'masuk')
             ->orderBy('waktu_masuk', 'desc')
             ->get();
@@ -25,68 +25,91 @@ class TransaksiController extends Controller
     }
     public function parkirMasuk(Request $request)
     {
-        $request->validate([
+        // Validasi input
+        $validated = $request->validate([
             'plat_nomor' => 'required|string|max:15',
             'jenis_kendaraan' => 'required|in:motor,mobil,lainnya',
             'id_area' => 'required|exists:tb_area_parkir,id_area',
             'warna' => 'nullable|string|max:20',
-            'pemilik' => 'nullable|string|max:100'
+            'pemilik' => 'nullable|string|max:100',
         ]);
 
-        DB::beginTransaction();
-        try {
-            $area = AreaParkir::findOrFail($request->id_area);
-            if ($area->terisi >= $area->kapasitas) {
-                return response()->json(['success' => false, 'message' => 'Area parkir penuh!'], 400);
-            }
+        // ✅ CEK PLAT NOMOR SUDAH TERSEDIA (SEDANG PARKIR)
+        $platSudahAda = Kendaraan::where('plat_nomor', strtoupper($validated['plat_nomor']))
+            ->whereHas('transaksiAktif', function($query) {
+                $query->where('status', 'masuk');
+            })
+            ->exists();
 
-            $kendaraan = Kendaraan::firstOrCreate(
-                ['plat_nomor' => strtoupper($request->plat_nomor)],
-                [
-                    'jenis_kendaraan' => $request->jenis_kendaraan,
-                    'warna' => $request->warna ?? 'Tidak diketahui',
-                    'pemilik' => $request->pemilik ?? 'Umum',
-                    'id_user' => auth()->id() ?? 1
-                ]
-            );
-
-            $tarif = Tarif::where('jenis_kendaraan', $request->jenis_kendaraan)->first();
-            if (!$tarif) {
-                return response()->json(['success' => false, 'message' => 'Tarif belum diatur!'], 400);
-            }
-
-            $transaksi = Transaksi::create([
-                'id_kendaraan' => $kendaraan->id_kendaraan,
-                'waktu_masuk' => Carbon::now(),
-                'id_tarif' => $tarif->id_tarif,
-                'status' => 'masuk',
-                'id_area' => $request->id_area,
-                'id_user' => auth()->id() ?? 1,
-                'biaya_total' => 0
-            ]);
-
-            $area->increment('terisi');
-
-            LogAktivitas::create([
-                'id_user' => auth()->id() ?? 1,
-                'aktivitas' => 'Kendaraan masuk: ' . $kendaraan->plat_nomor,
-                'waktu_aktivitas' => Carbon::now()
-            ]);
-
-            DB::commit();
-            return response()->json(['success' => true, 'message' => 'Berhasil masuk!', 'data' => $transaksi], 201);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        if ($platSudahAda) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Plat nomor sudah tersedia (kendaraan sedang parkir)!'
+            ], 422);
         }
+
+        // Cek kapasitas area
+        $area = AreaParkir::find($validated['id_area']);
+        if ($area->terisi >= $area->kapasitas) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Area parkir sudah penuh!'
+            ], 422);
+        }
+
+        // Cari atau buat kendaraan
+        $kendaraan = Kendaraan::firstOrCreate(
+            ['plat_nomor' => strtoupper($validated['plat_nomor'])],
+            [
+                'jenis_kendaraan' => $validated['jenis_kendaraan'],
+                'warna' => $validated['warna'] ?? 'Tidak diketahui',
+                'pemilik' => $validated['pemilik'] ?? 'Umum',
+                'id_user' => auth()->id(),
+            ]
+        );
+
+        // Ambil tarif
+        $tarif = Tarif::where('jenis_kendaraan', $validated['jenis_kendaraan'])->first();
+        if (!$tarif) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tarif untuk jenis kendaraan ini belum diatur!'
+            ], 422);
+        }
+
+        // Buat transaksi
+        $transaksi = Transaksi::create([
+            'id_kendaraan' => $kendaraan->id_kendaraan,
+            'id_area' => $validated['id_area'],
+            'id_tarif' => $tarif->id_tarif,
+            'id_user' => auth()->id(),
+            'waktu_masuk' => now(),
+            'status' => 'masuk',
+            'biaya_total' => 0,
+        ]);
+
+        // Update area terisi
+        $area->increment('terisi');
+
+        // Catat log aktivitas
+        LogAktivitas::create([
+            'id_user' => auth()->id(),
+            'aktivitas' => 'Kendaraan masuk: ' . $kendaraan->plat_nomor,
+            'waktu_aktivitas' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Kendaraan berhasil masuk!',
+            'data' => $transaksi
+        ]);
     }
 
     public function parkirKeluar($id_parkir)
     {
         DB::beginTransaction();
         try {
-            $transaksi = Transaksi::with(['kendaraan', 'tarif', 'area'])->findOrFail($id_parkir);
+            $transaksi = Transaksi::with(['kendaraan', 'tarif', 'area', 'user'])->findOrFail($id_parkir);
 
             if ($transaksi->status === 'keluar') {
                 return response()->json(['success' => false, 'message' => 'Kendaraan sudah keluar!'], 400);
@@ -119,10 +142,12 @@ class TransaksiController extends Controller
             ]);
 
             DB::commit();
+            
             return response()->json([
                 'success' => true, 
                 'message' => 'Berhasil keluar!', 
                 'data' => [
+                    'id_parkir' => $transaksi->id_parkir, // ✅ TAMBAHKAN INI
                     'plat_nomor' => $transaksi->kendaraan->plat_nomor,
                     'durasi_jam' => $durasiJam,
                     'biaya_total' => $biayaTotal,

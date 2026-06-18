@@ -5,7 +5,7 @@
 
 @section('styles')
 <style>
-    .page-header {
+    .page-header { 
         background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         color: white;
         padding: 30px;
@@ -81,61 +81,151 @@
         font-weight: 500;
     }
     
-    .form-card {
+    /* Style untuk Area Card - UPDATED */
+    .area-card {
         background: white;
         border-radius: 15px;
+        padding: 25px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        overflow: hidden;
-        margin-bottom: 30px;
-    }
-    
-    .form-card-header {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        color: white;
-        padding: 20px 25px;
-    }
-    
-    .form-card-header h5 {
-        margin: 0;
-        font-weight: 600;
-    }
-    
-    .form-card-body {
-        padding: 30px;
-    }
-    
-    .form-label {
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 8px;
-        font-size: 0.9rem;
-    }
-    
-    .form-control, .form-select {
-        border-radius: 10px;
-        padding: 12px 15px;
-        border: 1px solid #e0e0e0;
         transition: all 0.3s;
+        margin-bottom: 20px;
+        border: 2px solid #e2e8f0;
     }
     
-    .form-control:focus, .form-select:focus {
+    .area-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
         border-color: #11998e;
-        box-shadow: 0 0 0 0.2rem rgba(17, 153, 142, 0.25);
     }
     
-    .btn-proses {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        border: none;
+    .area-card.penuh {
+        opacity: 0.8;
+        border-color: #e74c3c;
+    }
+    
+    .area-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f1f5f9;
+    }
+    
+    .area-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .area-badge {
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .badge-tersedia {
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
         color: white;
-        padding: 12px 30px;
+        box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+    }
+    
+    .badge-penuh {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+    }
+    
+    .area-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .info-item {
+        background: #f8fafc;
+        padding: 15px;
         border-radius: 10px;
+        text-align: center;
+    }
+    
+    .info-label {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    
+    .info-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+    
+    .info-value.terisi { color: #e74c3c; }
+    .info-value.tersedia { color: #2ecc71; }
+    
+    .area-progress {
+        height: 10px;
+        background: #ecf0f1;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 15px;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .area-progress-bar {
+        height: 100%;
+        border-radius: 5px;
+        transition: width 0.5s ease;
+    }
+    
+    .progress-success { background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%); }
+    .progress-warning { background: linear-gradient(90deg, #f39c12 0%, #e67e22 100%); }
+    .progress-danger { background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%); }
+    
+    .area-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 2px solid #f1f5f9;
+    }
+    
+    .capacity-text {
+        font-size: 0.85rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+    
+    /* UPDATED: Tombol Detail yang berbeda */
+    .btn-info-area {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.85rem;
         font-weight: 600;
         transition: all 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
     
-    .btn-proses:hover {
+    .btn-info-area:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         color: white;
     }
     
@@ -314,7 +404,7 @@
                 <div class="stat-icon">
                     <i class="fas fa-map-marked-alt"></i>
                 </div>
-                <div class="stat-number">{{ \App\Models\AreaParkir::count() }}</div>
+                <div class="stat-number">{{ $areas->count() }}</div>
                 <p class="stat-label">Total Area</p>
             </div>
         </div>
@@ -329,162 +419,173 @@
         </div>
     </div>
 
-    <!-- Form Input Kendaraan Masuk -->
-    <div class="form-card">
-        <div class="form-card-header">
-            <h5><i class="fas fa-plus-circle me-2"></i>Input Kendaraan Masuk</h5>
+    <!-- Section Area Parkir -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4 style="margin-bottom: 20px; font-weight: 700; color: #2c3e50;">
+                <i class="fas fa-map-marker-alt me-2" style="color: #11998e;"></i>Status Area Parkir
+            </h4>
         </div>
-        <div class="form-card-body">
-            <form id="formParkirMasuk">
-                @csrf
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label">
-                            <i class="fas fa-car me-1"></i> Plat Nomor <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" name="plat_nomor" id="plat_nomor" 
-                               class="form-control text-uppercase" 
-                               placeholder="B 1234 XYZ" required>
+
+        @foreach($areas as $area)
+        @php
+            $tersedia = $area->kapasitas - $area->terisi;
+            $persen = $area->kapasitas > 0 ? ($area->terisi / $area->kapasitas) * 100 : 0;
+            $isPenuh = $tersedia <= 0;
+            
+            if ($persen >= 100) {
+                $progressClass = 'progress-danger';
+                $badgeClass = 'badge-penuh';
+                $badgeText = 'PENUH';
+            } elseif ($persen >= 80) {
+                $progressClass = 'progress-warning';
+                $badgeClass = 'badge-tersedia';
+                $badgeText = 'HAMPIR PENUH';
+            } else {
+                $progressClass = 'progress-success';
+                $badgeClass = 'badge-tersedia';
+                $badgeText = 'TERSEDIA';
+            }
+        @endphp
+        <div class="col-md-6 col-lg-4">
+            <div class="area-card {{ $isPenuh ? 'penuh' : '' }}">
+                <div class="area-header">
+                    <h5 class="area-name">
+                        <i class="fas fa-warehouse" style="color: #11998e;"></i>{{ $area->nama_area }}
+                    </h5>
+                    <span class="area-badge {{ $badgeClass }}">{{ $badgeText }}</span>
+                </div>
+                
+                <div class="area-info">
+                    <div class="info-item">
+                        <div class="info-label">Terisi</div>
+                        <div class="info-value terisi">{{ $area->terisi }}</div>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label">
-                            <i class="fas fa-motorcycle me-1"></i> Jenis <span class="text-danger">*</span>
-                        </label>
-                        <select name="jenis_kendaraan" class="form-select" required>
-                            <option value="">-- Pilih --</option>
-                            <option value="motor">🏍️ Motor</option>
-                            <option value="mobil"> Mobil</option>
-                            <option value="lainnya">🚚 Lainnya</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">
-                            <i class="fas fa-map-marker-alt me-1"></i> Area <span class="text-danger">*</span>
-                        </label>
-                        <select name="id_area" class="form-select" required>
-                            <option value="">-- Pilih Area --</option>
-                            @foreach(\App\Models\AreaParkir::all() as $area)
-                                @php $tersedia = $area->kapasitas - $area->terisi; @endphp
-                                <option value="{{ $area->id_area }}" {{ $tersedia <= 0 ? 'disabled' : '' }}>
-                                    {{ $area->nama_area }} ({{ $tersedia }} tersedia)
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">
-                            <i class="fas fa-palette me-1"></i> Warna
-                        </label>
-                        <input type="text" name="warna" class="form-control" placeholder="Hitam">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-proses w-100">
-                            <i class="fas fa-arrow-circle-down me-1"></i>Proses Masuk
-                        </button>
+                    <div class="info-item">
+                        <div class="info-label">Tersedia</div>
+                        <div class="info-value tersedia">{{ $tersedia }}</div>
                     </div>
                 </div>
-            </form>
+                
+                <div class="area-progress">
+                    <div class="area-progress-bar {{ $progressClass }}" style="width: {{ min($persen, 100) }}%"></div>
+                </div>
+                
+                <div class="area-footer">
+                    <small class="capacity-text">
+                        <i class="fas fa-layer-group me-1"></i> Kapasitas: {{ $area->kapasitas }}
+                    </small>
+                        <a href="{{ route('petugas.area.detail', $area->id_area) }}" class="btn-info-area">
+                            <i class="fas fa-info-circle"></i> Detail
+                        </a>
+                </div>
+            </div>
         </div>
+        @endforeach
     </div>
 
     <!-- Tabel Kendaraan Sedang Parkir -->
-    <div class="table-card">
-        <div class="table-header">
-            <h5><i class="fas fa-list me-2"></i>Kendaraan Sedang Parkir</h5>
-            <span class="badge bg-light text-dark">{{ $transaksiAktif->count() }} kendaraan</span>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="table-card">
+                <div class="table-header">
+                    <h5><i class="fas fa-list me-2"></i>Kendaraan Sedang Parkir</h5>
+                    <span class="badge bg-light text-dark">{{ $transaksiAktif->count() }} kendaraan</span>
+                </div>
+                
+                @if($transaksiAktif->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-modern">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th width="15%">Plat Nomor</th>
+                                <th width="12%">Jenis</th>
+                                <th width="15%">Area</th>
+                                <th width="18%">Waktu Masuk</th>
+                                <th width="15%">Durasi</th>
+                                <th width="20%" class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($transaksiAktif as $index => $t)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>
+                                    <span class="plat-nomor">{{ $t->kendaraan->plat_nomor }}</span>
+                                </td>
+                                <td>
+                                    @if($t->kendaraan->jenis_kendaraan == 'motor')
+                                        <span class="badge-jenis badge-motor">
+                                            <i class="fas fa-motorcycle me-1"></i>Motor
+                                        </span>
+                                    @elseif($t->kendaraan->jenis_kendaraan == 'mobil')
+                                        <span class="badge-jenis badge-mobil">
+                                            <i class="fas fa-car me-1"></i>Mobil
+                                        </span>
+                                    @else
+                                        <span class="badge-jenis badge-lainnya">Lainnya</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge-area">
+                                        <i class="fas fa-map-marker-alt me-1"></i>{{ $t->area->nama_area ?? '-' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ \Carbon\Carbon::parse($t->waktu_masuk)->format('d/m/Y H:i') }}
+                                    </small>
+                                </td>
+                                <td>
+                                    @php
+                                        $masuk = \Carbon\Carbon::parse($t->waktu_masuk);
+                                        $menit = $masuk->diffInMinutes(now());
+                                        $jam = floor($menit / 60);
+                                        $menitSisa = $menit % 60;
+                                        
+                                        if($jam < 1) {
+                                            $durasiText = $menit . ' mnt';
+                                            $durasiClass = 'durasi-baru';
+                                        } elseif($jam < 3) {
+                                            $durasiText = $jam . 'j ' . $menitSisa . 'm';
+                                            $durasiClass = 'durasi-sedang';
+                                        } else {
+                                            $durasiText = $jam . 'j ' . $menitSisa . 'm';
+                                            $durasiClass = 'durasi-lama';
+                                        }
+                                    @endphp
+                                    <span class="durasi-badge {{ $durasiClass }}">
+                                        {{ $durasiText }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="action-buttons justify-content-center">
+                                        <a href="{{ route('petugas.cetak.struk', $t->id_parkir) }}" 
+                                           class="btn btn-cetak" target="_blank">
+                                            <i class="fas fa-print"></i> Cetak
+                                        </a>
+                                        <button type="button" class="btn btn-keluar" 
+                                                onclick="konfirmasiKeluar({{ $t->id_parkir }}, '{{ $t->kendaraan->plat_nomor }}')">
+                                            <i class="fas fa-sign-out-alt"></i> Keluar
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @else
+                <div class="empty-state">
+                    <i class="fas fa-parking"></i>
+                    <h5>Tidak Ada Kendaraan</h5>
+                    <p>Belum ada kendaraan yang sedang parkir saat ini</p>
+                </div>
+                @endif
+            </div>
         </div>
-        
-        @if($transaksiAktif->count() > 0)
-        <div class="table-responsive">
-            <table class="table table-modern">
-                <thead>
-                    <tr>
-                        <th width="5%">No</th>
-                        <th width="15%">Plat Nomor</th>
-                        <th width="12%">Jenis</th>
-                        <th width="15%">Area</th>
-                        <th width="18%">Waktu Masuk</th>
-                        <th width="15%">Durasi</th>
-                        <th width="20%" class="text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($transaksiAktif as $index => $t)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>
-                            <span class="plat-nomor">{{ $t->kendaraan->plat_nomor }}</span>
-                        </td>
-                        <td>
-                            @if($t->kendaraan->jenis_kendaraan == 'motor')
-                                <span class="badge-jenis badge-motor">
-                                    <i class="fas fa-motorcycle me-1"></i>Motor
-                                </span>
-                            @elseif($t->kendaraan->jenis_kendaraan == 'mobil')
-                                <span class="badge-jenis badge-mobil">
-                                    <i class="fas fa-car me-1"></i>Mobil
-                                </span>
-                            @else
-                                <span class="badge-jenis badge-lainnya">Lainnya</span>
-                            @endif
-                        </td>
-                        <td>
-                            <span class="badge-area">
-                                <i class="fas fa-map-marker-alt me-1"></i>{{ $t->area->nama_area ?? '-' }}
-                            </span>
-                        </td>
-                        <td>
-                            <small class="text-muted">
-                                <i class="fas fa-clock me-1"></i>
-                                {{ \Carbon\Carbon::parse($t->waktu_masuk)->format('d/m/Y H:i') }}
-                            </small>
-                        </td>
-                        <td>
-                            @php
-                                $masuk = \Carbon\Carbon::parse($t->waktu_masuk);
-                                $menit = $masuk->diffInMinutes(now());
-                                $jam = floor($menit / 60);
-                                $menitSisa = $menit % 60;
-                                
-                                if($jam < 1) {
-                                    $durasiText = $menit . ' mnt';
-                                    $durasiClass = 'durasi-baru';
-                                } elseif($jam < 3) {
-                                    $durasiText = $jam . 'j ' . $menitSisa . 'm';
-                                    $durasiClass = 'durasi-sedang';
-                                } else {
-                                    $durasiText = $jam . 'j ' . $menitSisa . 'm';
-                                    $durasiClass = 'durasi-lama';
-                                }
-                            @endphp
-                            <span class="durasi-badge {{ $durasiClass }}">
-                                {{ $durasiText }}
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <div class="action-buttons justify-content-center">
-                                <a href="{{ route('petugas.cetak.struk', $t->id_parkir) }}" 
-                                   class="btn btn-cetak" target="_blank">
-                                    <i class="fas fa-print"></i> Cetak
-                                </a>
-                                <button type="button" class="btn btn-keluar" 
-                                        onclick="konfirmasiKeluar({{ $t->id_parkir }}, '{{ $t->kendaraan->plat_nomor }}')">
-                                    <i class="fas fa-sign-out-alt"></i> Keluar
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        @else
-        <div class="empty-state">
-            <i class="fas fa-parking"></i>
-            <h5>Tidak Ada Kendaraan</h5>
-            <p>Belum ada kendaraan yang sedang parkir saat ini</p>
-        </div>
-        @endif
     </div>
 </div>
 
@@ -527,63 +628,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 let idParkirKeluar = null;
-
-// Auto uppercase plat nomor
-document.getElementById('plat_nomor').addEventListener('input', function() {
-    this.value = this.value.toUpperCase();
-});
-
-// Submit form parkir masuk dengan AJAX
-document.getElementById('formParkirMasuk').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    const btn = this.querySelector('button[type="submit"]');
-    const originalText = btn.innerHTML;
-    
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Memproses...';
-    btn.disabled = true;
-    
-    fetch('{{ route("parkir.masuk") }}', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Kendaraan berhasil masuk!',
-                timer: 2000,
-                showConfirmButton: false
-            }).then(() => {
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: data.message || 'Terjadi kesalahan'
-            });
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Terjadi kesalahan pada server'
-        });
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    });
-});
 
 // Konfirmasi keluar
 function konfirmasiKeluar(idParkir, platNomor) {

@@ -223,7 +223,7 @@
             
             {{-- Menu Petugas --}}
             @if(auth()->user()->role === 'petugas')
-            <a class="nav-link {{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}" href="{{ route('petugas.dashboard') }}">
+            <a class="nav-link {{ (request()->routeIs('petugas.dashboard') || request()->routeIs('petugas.area.*')) ? 'active' : '' }}" href="{{ route('petugas.dashboard') }}">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
             
@@ -234,7 +234,7 @@
             
             {{-- Menu Khusus Owner --}}
             @if(auth()->user()->role === 'owner')
-                <a class="nav-link {{ request()->routeIs('owner.dashboard') ? 'active' : '' }}" href="{{ route('owner.dashboard') }}">
+                <a class="nav-link {{ (request()->routeIs('owner.dashboard') || request()->routeIs('owner.area.*')) ? 'active' : '' }}" href="{{ route('owner.dashboard') }}">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
                 <a class="nav-link {{ request()->routeIs('owner.log') ? 'active' : '' }}" href="{{ route('owner.log') }}">
