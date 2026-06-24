@@ -124,6 +124,88 @@
         border-radius: 5px;
         display: inline-block;
     }
+
+    /* PRINT STYLES - Sembunyikan SEMUA kecuali struk */
+    @media print {
+        @page {
+            margin: 10mm;
+            size: auto;
+        }
+        
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        
+        /* Sembunyikan SEMUA elemen */
+        body * {
+            visibility: hidden !important;
+        }
+        
+        /* Tampilkan hanya modal struk dan isinya */
+        #modalStruk,
+        #modalStruk *,
+        #modalStruk .modal-content,
+        #modalStruk .modal-body,
+        #modalStruk .modal-body * {
+            visibility: visible !important;
+        }
+        
+        /* Reset posisi modal */
+        #modalStruk {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+        }
+        
+        #modalStruk .modal-content {
+            box-shadow: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+            padding: 20px !important;
+            max-width: 400px !important;
+        }
+        
+        /* Sembunyikan tombol di modal */
+        #modalStruk .modal-footer,
+        #modalStruk button,
+        #modalStruk .btn-close {
+            display: none !important;
+        }
+        
+        /* Hide scrollbar */
+        body {
+            overflow: visible !important;
+        }
+        
+        /* Hide everything else */
+        .main-sidebar,
+        .main-header,
+        .main-footer,
+        .top-navbar,
+        .content-wrapper,
+        .wrapper,
+        nav,
+        header,
+        footer,
+        aside,
+        [class*="sidebar"],
+        [class*="navbar"],
+        .modal-backdrop {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    }
+
 </style>
 @endsection
 
@@ -532,38 +614,43 @@ function tampilkanStruk(data) {
     const jam = now.toLocaleTimeString('id-ID');
     
     const html = `
-        <div class="text-center mb-3">
-            <h4 class="mb-1"><i class="fas fa-parking me-2"></i>SMART PARKIR</h4>
-            <small class="text-muted">STRUK PEMBAYARAN PARKIR</small>
+        <div style="font-family: 'Courier New', monospace; padding: 20px;">
+            <div style="text-align: center; border-bottom: 2px dashed #333; padding-bottom: 15px; margin-bottom: 15px;">
+                <h4 style="margin: 0 0 5px 0; font-size: 18px;">🅿️ SMART PARKIR</h4>
+                <small style="color: #666;">STRUK PEMBAYARAN PARKIR</small>
+                <p style="margin: 5px 0 0 0; font-size: 11px; color: #666;">${tanggal}</p>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px;">
+                    <span style="color: #666;">Plat Nomor</span>
+                    <span style="font-weight: bold;">: ${data.plat_nomor}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px;">
+                    <span style="color: #666;">Waktu Masuk</span>
+                    <span style="font-weight: bold;">: ${data.waktu_masuk}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px;">
+                    <span style="color: #666;">Waktu Keluar</span>
+                    <span style="font-weight: bold;">: ${data.waktu_keluar}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px;">
+                    <span style="color: #666;">Durasi Parkir</span>
+                    <span style="font-weight: bold;">: ${data.durasi_jam} Jam</span>
+                </div>
+            </div>
+            
+            <div style="border-top: 2px dashed #333; margin: 15px 0;"></div>
+            
+            <div style="text-align: center; margin: 15px 0;">
+                <div style="font-size: 12px; color: #666; margin-bottom: 5px;">TOTAL BAYAR</div>
+                <div style="font-size: 20px; font-weight: bold; color: #11998e;">${data.formatted_biaya}</div>
+            </div>
+            
+            <div style="border-top: 2px dashed #333; padding-top: 15px; text-align: center; font-size: 10px; color: #666;">
+                <p style="margin: 0;">Terima kasih telah menggunakan layanan Smart Parkir</p>
+            </div>
         </div>
-        <hr>
-        <table class="table table-borderless table-sm">
-            <tr>
-                <td width="40%"><strong>Plat Nomor</strong></td>
-                <td>: <span class="plat-nomor">${data.plat_nomor}</span></td>
-            </tr>
-            <tr>
-                <td><strong>Durasi Parkir</strong></td>
-                <td>: ${data.durasi_jam} Jam</td>
-            </tr>
-            <tr>
-                <td><strong>Tanggal Cetak</strong></td>
-                <td>: ${tanggal}</td>
-            </tr>
-            <tr>
-                <td><strong>Waktu</strong></td>
-                <td>: ${jam}</td>
-            </tr>
-        </table>
-        <hr>
-        <div class="text-center">
-            <h5 class="text-muted">TOTAL BAYAR</h5>
-            <h2 style="color: #11998e; font-weight: 700;">${data.formatted_biaya}</h2>
-        </div>
-        <hr>
-        <p class="text-center text-muted mb-0">
-            <small>Terima kasih telah menggunakan layanan Smart Parkir</small>
-        </p>
     `;
     
     document.getElementById('strukContent').innerHTML = html;

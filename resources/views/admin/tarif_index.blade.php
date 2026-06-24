@@ -153,6 +153,26 @@
         box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
         color: white;
     }
+
+    .btn-add {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        border: none;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 6px rgba(243, 156, 18, 0.2);
+    }
+
+    .btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
+        color: white;
+    }
     
     .empty-state {
         text-align: center;
@@ -170,38 +190,25 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Form Tambah Tarif -->
-    <div class="form-card">
-        <h5><i class="fas fa-plus-circle me-2" style="color: #f39c12;"></i>Tambah Tarif Baru</h5>
-        <form action="{{ route('admin.tarif.store') }}" method="POST">
-            @csrf
-            <div class="row g-3 align-items-end">
-                <div class="col-md-5">
-                    <label class="form-label fw-bold">Jenis Kendaraan</label>
-                    <select name="jenis_kendaraan" class="form-select" required>
-                        <option value="">-- Pilih Jenis --</option>
-                        <option value="motor">🏍️ Motor</option>
-                        <option value="mobil">🚗 Mobil</option>
-                        <option value="lainnya">🚚 Lainnya</option>
-                    </select>
-                </div>
-                <div class="col-md-5">
-                    <label class="form-label fw-bold">Tarif per Jam (Rp)</label>
-                    <input type="number" name="tarif_per_jam" class="form-control" placeholder="Contoh: 2000" required min="0">
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-save w-100">
-                        <i class="fas fa-save me-1"></i>Simpan
-                    </button>
-                </div>
-            </div>
-        </form>
+    
+    <!-- Header dengan Tombol Tambah -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div>
+            <h2 style="margin: 0; font-weight: 700; color: #1e293b; font-size: 22pt;">
+                <i class="bi bi-cash-coin" style="color: #f39c12; margin-right: 8px;"></i> Manajemen Tarif Parkir
+            </h2>
+            <p style="margin: 5px 0 0 0; color: #64748b; font-size: 11pt;">Kelola tarif parkir untuk setiap jenis kendaraan.</p>
+        </div>
+        <button type="button" class="btn btn-add" onclick="openModalTambah()">
+            <i class="bi bi-plus-circle-fill"></i> Tambah Tarif Baru
+        </button>
     </div>
 
     <!-- Tabel Tarif -->
     <div class="table-card">
         <div class="table-header">
             <h5><i class="fas fa-list me-2"></i>Daftar Tarif Parkir</h5>
+            <span class="badge bg-light text-dark">{{ $tarif->count() }} tarif terdaftar</span>
         </div>
         
         @if($tarif->count() > 0)
@@ -264,9 +271,50 @@
         <div class="empty-state">
             <i class="fas fa-money-bill-wave"></i>
             <h5>Belum Ada Tarif</h5>
-            <p>Tambahkan tarif untuk jenis kendaraan menggunakan form di atas</p>
+            <p>Klik tombol "Tambah Tarif Baru" untuk menambahkan tarif parkir</p>
         </div>
         @endif
+    </div>
+</div>
+
+<!-- Modal Tambah Tarif -->
+<div class="modal fade" id="modalTambahTarif" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 15px; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus-circle me-2"></i>Tambah Tarif Baru
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('admin.tarif.store') }}" method="POST">
+                @csrf
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Jenis Kendaraan <span class="text-danger">*</span></label>
+                        <select name="jenis_kendaraan" class="form-select" required>
+                            <option value="">-- Pilih Jenis --</option>
+                            <option value="motor">🏍️ Motor</option>
+                            <option value="mobil">🚗 Mobil</option>
+                            <option value="lainnya">🚚 Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tarif per Jam (Rp) <span class="text-danger">*</span></label>
+                        <input type="number" name="tarif_per_jam" class="form-control" placeholder="Contoh: 2000" required min="0">
+                        <small class="text-muted">Masukkan tarif parkir per jam dalam Rupiah</small>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 8px;">
+                        <i class="fas fa-times me-1"></i>Batal
+                    </button>
+                    <button type="submit" class="btn" style="border-radius: 8px; background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; padding: 10px 25px;">
+                        <i class="fas fa-save me-1"></i>Simpan Tarif
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -314,6 +362,11 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+// Fungsi untuk membuka modal tambah
+function openModalTambah() {
+    new bootstrap.Modal(document.getElementById('modalTambahTarif')).show();
+}
+
 function editTarif(id, jenis, tarif) {
     document.getElementById('edit_jenis_kendaraan').value = jenis;
     document.getElementById('edit_tarif_per_jam').value = tarif;

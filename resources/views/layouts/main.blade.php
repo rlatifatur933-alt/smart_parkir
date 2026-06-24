@@ -259,10 +259,10 @@
                 <i class="fas fa-users"></i> Manajemen User
             </a>
             
-            <a class="nav-link {{ request()->routeIs('admin.kendaraan.*') ? 'active' : '' }}" href="{{ route('admin.kendaraan.index') }}">
+            <a class="nav-link {{ (request()->routeIs('admin.kendaraan.index') || request()->routeIs('admin.kendaraan.detail')) ? 'active' : '' }}" href="{{ route('admin.kendaraan.index') }}">
                 <i class="fas fa-motorcycle"></i> Data Kendaraan
             </a>
-            
+
             <a class="nav-link {{ request()->routeIs('admin.log.*') ? 'active' : '' }}" href="{{ route('admin.log.index') }}">
                 <i class="fas fa-history"></i> Log Aktivitas
             </a>

@@ -362,6 +362,47 @@
         margin-bottom: 20px;
         opacity: 0.3;
     }
+
+    .search-box {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        padding-left: 40px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        width: 100%;
+        max-width: 350px;
+        padding: 10px 15px 10px 40px;
+        transition: all 0.3s;
+    }
+
+    .search-box input:focus {
+        outline: none;
+        border-color: #11998e;
+        box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #95a5a6;
+        font-size: 1rem;
+    }
+
+    .search-info {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        display: none;
+    }
+
+    .search-info.show {
+        display: block;
+    }
     
     .durasi-badge {
         font-weight: 600;
@@ -489,13 +530,25 @@
         <div class="col-12">
             <div class="table-card">
                 <div class="table-header">
-                    <h5><i class="fas fa-list me-2"></i>Kendaraan Sedang Parkir</h5>
-                    <span class="badge bg-light text-dark">{{ $transaksiAktif->count() }} kendaraan</span>
+                    <div>
+                        <h5 class="mb-1"><i class="fas fa-list me-2"></i>Kendaraan Sedang Parkir</h5>
+                        <small style="opacity: 0.9;">
+                            <span id="totalKendaraan">{{ $transaksiAktif->count() }}</span> kendaraan terdaftar
+                        </small>
+                    </div>
+                    <div class="search-box" style="margin: 0;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Cari plat nomor, jenis, atau area...">
+                    </div>
+                </div>
+                <div id="searchInfo" class="search-info px-4 pb-3">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Menampilkan <strong id="visibleCount">0</strong> dari <strong id="totalCount">{{ $transaksiAktif->count() }}</strong> kendaraan
                 </div>
                 
                 @if($transaksiAktif->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-modern">
+                    <table class="table table-modern" id="tableKendaraan">
                         <thead>
                             <tr>
                                 <th width="5%">No</th>
@@ -692,6 +745,66 @@ document.getElementById('btnProsesKeluar').addEventListener('click', function() 
         btn.innerHTML = originalText;
         btn.disabled = false;
     });
+});
+
+// Search functionality
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    let value = this.value.toUpperCase();
+    let table = document.getElementById('tableKendaraan');
+    let tr = table.getElementsByTagName('tr');
+    let visibleCount = 0;
+    
+    // Loop through all table rows, and hide those who don't match the search query
+    for (let i = 1; i < tr.length; i++) {
+        let platTd = tr[i].getElementsByTagName('td')[1];
+        let jenisTd = tr[i].getElementsByTagName('td')[2];
+        let areaTd = tr[i].getElementsByTagName('td')[3];
+        
+        if (platTd || jenisTd || areaTd) {
+            let platTxt = platTd.textContent || platTd.innerText;
+            let jenisTxt = jenisTd.textContent || jenisTd.innerText;
+            let areaTxt = areaTd.textContent || areaTd.innerText;
+            
+            if (platTxt.toUpperCase().indexOf(value) > -1 || 
+                jenisTxt.toUpperCase().indexOf(value) > -1 || 
+                areaTxt.toUpperCase().indexOf(value) > -1) {
+                tr[i].style.display = "";
+                visibleCount++;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    
+    // Update counter
+    document.getElementById('visibleCount').textContent = visibleCount;
+    document.getElementById('totalCount').textContent = {{ $transaksiAktif->count() }};
+    
+    // Show/hide search info
+    if (value.length > 0) {
+        document.getElementById('searchInfo').classList.add('show');
+    } else {
+        document.getElementById('searchInfo').classList.remove('show');
+    }
+    
+    // Show message if no results
+    let noResultsMsg = document.getElementById('noResultsMsg');
+    if (visibleCount === 0 && value.length > 0) {
+        if (!noResultsMsg) {
+            let tbody = table.querySelector('tbody');
+            let msgRow = document.createElement('tr');
+            msgRow.id = 'noResultsMsg';
+            msgRow.innerHTML = `
+                <td colspan="7" style="padding: 40px; text-align: center; color: #95a5a6;">
+                    <i class="fas fa-search" style="font-size: 3rem; opacity: 0.3; display: block; margin-bottom: 10px;"></i>
+                    Tidak ada kendaraan yang sesuai dengan pencarian "<strong>${this.value}</strong>"
+                </td>
+            `;
+            tbody.appendChild(msgRow);
+        }
+    } else if (noResultsMsg) {
+        noResultsMsg.remove();
+    }
 });
 </script>
 @endsection

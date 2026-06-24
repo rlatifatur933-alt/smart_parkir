@@ -147,8 +147,10 @@ class TransaksiController extends Controller
                 'success' => true, 
                 'message' => 'Berhasil keluar!', 
                 'data' => [
-                    'id_parkir' => $transaksi->id_parkir, // ✅ TAMBAHKAN INI
+                    'id_parkir' => $transaksi->id_parkir,
                     'plat_nomor' => $transaksi->kendaraan->plat_nomor,
+                    'waktu_masuk' => $waktuMasuk->format('d/m/Y H:i'), // ✅ TAMBAHKAN
+                    'waktu_keluar' => $waktuKeluar->format('d/m/Y H:i'), // ✅ TAMBAHKAN
                     'durasi_jam' => $durasiJam,
                     'biaya_total' => $biayaTotal,
                     'formatted_biaya' => 'Rp ' . number_format($biayaTotal, 0, ',', '.')

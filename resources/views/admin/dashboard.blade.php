@@ -127,57 +127,94 @@
 </div>
 
 <!-- Transaksi Terakhir -->
-<div class="row">
-    <div class="col-12">
-        <div class="card table-custom">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-history text-primary"></i> Transaksi Terakhir</h5>
-                <a href="{{ route('parkir.index') }}" class="btn btn-sm btn-primary">
-                    <i class="fas fa-eye"></i> Lihat Semua
-                </a>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>ID Parkir</th>
-                                <th>Plat Nomor</th>
-                                <th>Jenis</th>
-                                <th>Waktu Masuk</th>
-                                <th>Area</th>
-                                <th>Status</th>
-                                <th>Biaya</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($transaksiTerakhir as $transaksi)
-                            <tr>
-                                <td><strong>#{{ $transaksi->id_parkir }}</strong></td>
-                                <td>{{ $transaksi->kendaraan->plat_nomor ?? '-' }}</td>
-                                <td>{{ ucfirst($transaksi->kendaraan->jenis_kendaraan ?? '-') }}</td>
-                                <td>{{ $transaksi->waktu_masuk->format('d/m/Y H:i') }}</td>
-                                <td>{{ $transaksi->area->nama_area ?? '-' }}</td>
-                                <td>
-                                    <span class="badge bg-{{ $transaksi->status === 'masuk' ? 'success' : 'secondary' }} badge-custom">
-                                        {{ ucfirst($transaksi->status) }}
-                                    </span>
-                                </td>
-                                <td>Rp {{ number_format($transaksi->biaya_total, 0, ',', '.') }}</td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="7" class="text-center text-muted py-4">
-                                    <i class="fas fa-inbox fa-2x mb-2"></i>
-                                    <p class="mb-0">Belum ada transaksi</p>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="fas fa-history me-2"></i>Transaksi Terakhir
+        </h5>
+        <a href="{{ route('admin.log.index') }}" class="btn btn-primary btn-sm">
+            🔍 Lihat Semua
+        </a>
+    </div>
+    <div class="card-body">
+        @if($transaksiTerakhir->count() > 0)
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th width="8%">ID Parkir</th>
+                        <th width="12%">Plat Nomor</th>
+                        <th width="10%">Jenis</th>
+                        <th width="14%">Waktu Masuk</th>
+                        <th width="14%">Waktu Keluar</th>
+                        <th width="12%">Area</th>
+                        <th width="10%">Status</th>
+                        <th width="12%">Biaya</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($transaksiTerakhir as $t)
+                    <tr>
+                        <td><strong>#{{ $t->id_parkir }}</strong></td>
+                        <td>
+                            <span class="badge bg-light text-dark border">
+                                {{ $t->kendaraan->plat_nomor }}
+                            </span>
+                        </td>
+                        <td>
+                            @if($t->kendaraan->jenis_kendaraan == 'motor')
+                                <span class="badge bg-primary">Motor</span>
+                            @elseif($t->kendaraan->jenis_kendaraan == 'mobil')
+                                <span class="badge bg-info">Mobil</span>
+                            @else
+                                <span class="badge bg-secondary">Lainnya</span>
+                            @endif
+                        </td>
+                        <td>
+                            <small>
+                                <i class="fas fa-clock me-1 text-muted"></i>
+                                {{ \Carbon\Carbon::parse($t->waktu_masuk)->format('d/m/Y H:i') }}
+                            </small>
+                        </td>
+                        <td>
+                            @if($t->waktu_keluar)
+                                <small>
+                                    <i class="fas fa-clock me-1 text-muted"></i>
+                                    {{ \Carbon\Carbon::parse($t->waktu_keluar)->format('d/m/Y H:i') }}
+                                </small>
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
+                        <td>
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                {{ $t->area->nama_area ?? '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            @if($t->status == 'masuk')
+                                <span class="badge bg-success">Masuk</span>
+                            @else
+                                <span class="badge bg-secondary">Keluar</span>
+                            @endif
+                        </td>
+                        <td>
+                            <strong class="text-success">
+                                Rp {{ number_format($t->biaya_total ?? 0, 0, ',', '.') }}
+                            </strong>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+        @else
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <p class="text-muted">Belum ada transaksi</p>
+        </div>
+        @endif
     </div>
 </div>
 @endsection

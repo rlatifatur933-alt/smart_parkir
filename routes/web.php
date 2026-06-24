@@ -54,21 +54,23 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::post('/admin/user', function (\Illuminate\Http\Request $request) {
 
-        $request->validate([
-            'nama_lengkap' => 'required',
-            'username'     => 'required|unique:user,username', 
-            'password'     => 'required',
-            'role'         => 'required',
+        $validated = $request->validate([
+            'nama_lengkap' => 'required|string|max:100',
+            'username'     => 'required|string|max:50|unique:tb_user,username', // ✅ UBAH user MENJADI tb_user
+            'password'     => 'required|string|min:6',
+            'role'         => 'required|in:admin,petugas,owner',
+        ], [
+            'username.unique' => 'Username sudah digunakan, silakan gunakan username lain.'
         ]);
-
+    
         \App\Models\User::create([
-            'nama_lengkap' => $request->nama_lengkap,
-            'username'     => $request->username,
-            'password'     => \Hash::make($request->password), 
-            'role'         => $request->role,
+            'nama_lengkap' => $validated['nama_lengkap'],
+            'username'     => $validated['username'],
+            'password'     => \Hash::make($validated['password']), 
+            'role'         => $validated['role'],
             'status_aktif' => 1, 
         ]);
-
+    
         return redirect('/admin/user')->with('sukses', 'User baru berhasil ditambahkan!');
     })->name('admin.user.store');
 
@@ -137,22 +139,22 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Route CRUD Area Parkir
     Route::get('/admin/area', function () {
-        $areas = \App\Models\AreaParkir::all();
+        $areas = AreaParkir::all();
         
         // Hitung statistik per area
         $areaStats = $areas->map(function($area) {
             // Transaksi masuk (status = 'masuk')
-            $masuk = \App\Models\Transaksi::where('id_area', $area->id_area)
+            $masuk = Transaksi::where('id_area', $area->id_area)
                 ->where('status', 'masuk')
                 ->count();
             
             // Transaksi keluar (status = 'keluar')
-            $keluar = \App\Models\Transaksi::where('id_area', $area->id_area)
+            $keluar = Transaksi::where('id_area', $area->id_area)
                 ->where('status', 'keluar')
                 ->count();
             
             // Total pendapatan (dari transaksi keluar)
-            $pendapatan = \App\Models\Transaksi::where('id_area', $area->id_area)
+            $pendapatan = Transaksi::where('id_area', $area->id_area)
                 ->where('status', 'keluar')
                 ->sum('biaya_total');
             
@@ -171,7 +173,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     })->name('admin.area.index');
     
     Route::post('/admin/area', function (\Illuminate\Http\Request $request) {
-        \App\Models\AreaParkir::create([
+        AreaParkir::create([
             'nama_area' => $request->nama_area,
             'kapasitas' => $request->kapasitas,
             'terisi'    => 0,
@@ -180,7 +182,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     })->name('admin.area.store');
     
     Route::put('/admin/area/{id}', function (\Illuminate\Http\Request $request, $id) {
-        $area = \App\Models\AreaParkir::where('id_area', $id)->firstOrFail();
+        $area = AreaParkir::where('id_area', $id)->firstOrFail();
         
         $validated = $request->validate([
             'nama_area' => 'required|string|max:100',
@@ -198,42 +200,42 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     })->name('admin.area.update');
     
     Route::delete('/admin/area/{id}', function ($id) {
-        $area = \App\Models\AreaParkir::where('id_area', $id)->first();
+        $area = AreaParkir::where('id_area', $id)->first();
         
         if ($area && $area->terisi > 0) {
             return redirect()->back()->with('error', 'Area tidak bisa dihapus karena masih ada kendaraan yang parkir!');
         }
         
-        \App\Models\AreaParkir::where('id_area', $id)->delete();
+        AreaParkir::where('id_area', $id)->delete();
         return redirect()->back()->with('sukses', 'Area parkir berhasil dihapus!');
     })->name('admin.area.destroy');
     
     // Route untuk halaman detail area
     Route::get('/admin/area/detail/{id}', function ($id) {
-        $area = \App\Models\AreaParkir::where('id_area', $id)->firstOrFail();
+        $area = AreaParkir::where('id_area', $id)->firstOrFail();
         
         // Statistik
-        $masuk = \App\Models\Transaksi::where('id_area', $id)
+        $masuk = Transaksi::where('id_area', $id)
             ->where('status', 'masuk')
             ->count();
         
-        $keluar = \App\Models\Transaksi::where('id_area', $id)
+        $keluar = Transaksi::where('id_area', $id)
             ->where('status', 'keluar')
             ->count();
         
-        $pendapatan = \App\Models\Transaksi::where('id_area', $id)
+        $pendapatan = Transaksi::where('id_area', $id)
             ->where('status', 'keluar')
             ->sum('biaya_total');
         
         // Kendaraan sedang parkir (masuk)
-        $kendaraanMasuk = \App\Models\Transaksi::where('id_area', $id)
+        $kendaraanMasuk = Transaksi::where('id_area', $id)
             ->where('status', 'masuk')
             ->with(['kendaraan', 'user'])
             ->orderBy('waktu_masuk', 'desc')
             ->get();
         
         // Kendaraan yang sudah keluar (semua)
-        $kendaraanKeluar = \App\Models\Transaksi::where('id_area', $id)
+        $kendaraanKeluar = Transaksi::where('id_area', $id)
             ->where('status', 'keluar')
             ->with(['kendaraan', 'user'])
             ->orderBy('waktu_keluar', 'desc')
@@ -251,9 +253,46 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Route kendaraan 
     Route::get('/admin/kendaraan', function () {
-        $kendaraan = Kendaraan::all();
+        $kendaraan = Kendaraan::with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
         return view('admin.kendaraan_index', compact('kendaraan'));
     })->name('admin.kendaraan.index');
+
+    Route::get('/admin/kendaraan/{id}/detail', function ($id) {
+        $kendaraan = Kendaraan::with('user')->findOrFail($id);
+        
+        // Ambil riwayat transaksi kendaraan ini
+        $riwayatTransaksi = Transaksi::with(['area', 'user'])
+            ->where('id_kendaraan', $id)
+            ->orderBy('waktu_masuk', 'desc')
+            ->get();
+        
+        // ✅ CEK STATUS PARKIR SAAT INI
+        $sedangParkir = Transaksi::where('id_kendaraan', $id)
+            ->where('status', 'masuk')
+            ->exists();
+        
+        // Ambil petugas yang pernah menginput kendaraan ini
+        $petugasList = Transaksi::with('user')
+            ->where('id_kendaraan', $id)
+            ->whereNotNull('id_user')
+            ->select('id_user')
+            ->distinct()
+            ->get()
+            ->pluck('user.nama_lengkap')
+            ->filter()
+            ->unique()
+            ->values();
+        
+        return view('admin.kendaraan_detail', compact(
+            'kendaraan', 
+            'riwayatTransaksi', 
+            'petugasList',
+            'sedangParkir' // ✅ KIRIM VARIABEL BARU
+        ));
+    })->name('admin.kendaraan.detail');
     
     Route::post('/admin/kendaraan', function (\Illuminate\Http\Request $request) {
         Kendaraan::create([
@@ -292,10 +331,19 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         
         // Filter jenis aktivitas
         if (request('jenis') == 'login') {
-            $query->where('aktivitas', 'like', '%Login%')
-                  ->orWhere('aktivitas', 'like', '%Logout%');
+            $query->where(function($q) {
+                $q->where('aktivitas', 'like', '%Login%')
+                  ->orWhere('aktivitas', 'like', '%Logout%')
+                  ->orWhere('aktivitas', 'like', '%login%')
+                  ->orWhere('aktivitas', 'like', '%logout%');
+            });
         } elseif (request('jenis') == 'parkir') {
-            $query->where('aktivitas', 'like', '%Kendaraan%');
+            $query->where(function($q) {
+                $q->where('aktivitas', 'like', '%Kendaraan%')
+                  ->orWhere('aktivitas', 'like', '%kendaraan%')
+                  ->orWhere('aktivitas', 'like', '%masuk%')
+                  ->orWhere('aktivitas', 'like', '%keluar%');
+            });
         }
         
         // Filter tanggal
@@ -313,10 +361,20 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         // Statistik
         $totalLogs = LogAktivitas::count();
         $totalLoginHariIni = LogAktivitas::whereDate('waktu_aktivitas', today())
-            ->where('aktivitas', 'like', '%Login%')
+            ->where(function($q) {
+                $q->where('aktivitas', 'like', '%Login%')
+                  ->orWhere('aktivitas', 'like', '%login%')
+                  ->orWhere('aktivitas', 'like', '%Logout%')
+                  ->orWhere('aktivitas', 'like', '%logout%');
+            })
             ->count();
         $totalParkirHariIni = LogAktivitas::whereDate('waktu_aktivitas', today())
-            ->where('aktivitas', 'like', '%Kendaraan%')
+            ->where(function($q) {
+                $q->where('aktivitas', 'like', '%Kendaraan%')
+                  ->orWhere('aktivitas', 'like', '%kendaraan%')
+                  ->orWhere('aktivitas', 'like', '%masuk%')
+                  ->orWhere('aktivitas', 'like', '%keluar%');
+            })
             ->count();
         $totalUserAktif = LogAktivitas::whereDate('waktu_aktivitas', today())
             ->distinct('id_user')
@@ -352,7 +410,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Route untuk cetak struk keluar (Petugas)
     Route::get('/petugas/cetak_struk/{id}', function ($id) {
-        $transaksi = \App\Models\Transaksi::with(['kendaraan', 'area', 'user', 'tarif'])
+        $transaksi = Transaksi::with(['kendaraan', 'area', 'user', 'tarif'])
             ->where('id_parkir', $id)
             ->firstOrFail();
         
@@ -399,7 +457,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Route untuk cek plat nomor
     Route::get('/parkir/cek-plat/{platNomor}', function ($platNomor) {
-        $sudahParkir = \App\Models\Kendaraan::where('plat_nomor', strtoupper($platNomor))
+        $sudahParkir = Kendaraan::where('plat_nomor', strtoupper($platNomor))
             ->whereHas('transaksi', function($query) {
                 $query->where('status', 'masuk');
             })
@@ -485,30 +543,30 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
         // Route untuk halaman detail area (Owner)
         Route::get('/area/detail/{id}', function ($id) {
-            $area = \App\Models\AreaParkir::where('id_area', $id)->firstOrFail();
+            $area = AreaParkir::where('id_area', $id)->firstOrFail();
             
             // Statistik
-            $masuk = \App\Models\Transaksi::where('id_area', $id)
+            $masuk = Transaksi::where('id_area', $id)
                 ->where('status', 'masuk')
                 ->count();
             
-            $keluar = \App\Models\Transaksi::where('id_area', $id)
+            $keluar = Transaksi::where('id_area', $id)
                 ->where('status', 'keluar')
                 ->count();
             
-            $pendapatan = \App\Models\Transaksi::where('id_area', $id)
+            $pendapatan = Transaksi::where('id_area', $id)
                 ->where('status', 'keluar')
                 ->sum('biaya_total');
             
             // Kendaraan sedang parkir (masuk)
-            $kendaraanMasuk = \App\Models\Transaksi::where('id_area', $id)
+            $kendaraanMasuk = Transaksi::where('id_area', $id)
                 ->where('status', 'masuk')
                 ->with(['kendaraan', 'user'])
                 ->orderBy('waktu_masuk', 'desc')
                 ->get();
             
             // Kendaraan yang sudah keluar (semua)
-            $kendaraanKeluar = \App\Models\Transaksi::where('id_area', $id)
+            $kendaraanKeluar = Transaksi::where('id_area', $id)
                 ->where('status', 'keluar')
                 ->with(['kendaraan', 'user'])
                 ->orderBy('waktu_keluar', 'desc')

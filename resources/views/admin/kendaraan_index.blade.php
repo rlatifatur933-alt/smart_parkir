@@ -169,6 +169,26 @@
         align-items: center;
         justify-content: flex-start;
     }
+
+    .btn-detail {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-detail:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(17, 153, 142, 0.4);
+        color: white;
+    }
     
     .btn-edit {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -326,7 +346,7 @@
                         <th width="12%">Warna</th>
                         <th width="23%">Pemilik</th>
                         <th width="15%">Terdaftar</th>
-                        <th width="15%">Aksi</th>
+                        <th width="20%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -371,8 +391,11 @@
                             </small>
                         </td>
                         <td>
-                            <!-- TOMBOL EDIT & HAPUS SEJAJAR -->
+                            <!-- TOMBOL DETAIL, EDIT & HAPUS SEJAJAR -->
                             <div class="action-buttons">
+                                <a href="{{ route('admin.kendaraan.detail', $k->id_kendaraan) }}" class="btn btn-detail">
+                                    <i class="fas fa-eye"></i> Detail
+                                </a>
                                 <button type="button" class="btn btn-edit" onclick="editKendaraan({{ $k->id_kendaraan }}, '{{ $k->plat_nomor }}', '{{ $k->jenis_kendaraan }}', '{{ $k->warna }}', '{{ $k->pemilik }}')">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
@@ -449,6 +472,99 @@
         </div>
     </div>
 </div>
+<!-- Modal Detail Kendaraan -->
+<div class="modal fade" id="modalDetailKendaraan" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius: 15px; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title">
+                    <i class="fas fa-eye me-2"></i>Detail Kendaraan
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <div class="text-center">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 2.5rem; color: white;">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <h4 id="detail_plat_nomor" style="font-family: 'Courier New', monospace; font-weight: 700; color: #2c3e50;"></h4>
+                            <span id="detail_jenis" class="badge-jenis" style="font-size: 1rem; padding: 8px 16px;"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card h-100" style="background: #f8f9fa; border: none; border-radius: 10px;">
+                            <div class="card-body p-3">
+                                <h6 class="text-muted mb-3" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <i class="fas fa-info-circle me-2"></i>Informasi Kendaraan
+                                </h6>
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">Plat Nomor</small>
+                                    <strong id="detail_plat" style="color: #2c3e50; font-size: 1.1rem;"></strong>
+                                </div>
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">Jenis Kendaraan</small>
+                                    <strong id="detail_jenis_text" style="color: #2c3e50;"></strong>
+                                </div>
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">Warna</small>
+                                    <strong id="detail_warna" style="color: #2c3e50;"></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card h-100" style="background: #f8f9fa; border: none; border-radius: 10px;">
+                            <div class="card-body p-3">
+                                <h6 class="text-muted mb-3" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <i class="fas fa-user me-2"></i>Informasi Pemilik
+                                </h6>
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">Nama Pemilik</small>
+                                    <strong id="detail_pemilik" style="color: #2c3e50; font-size: 1.1rem;"></strong>
+                                </div>
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">ID User</small>
+                                    <strong id="detail_id_user" style="color: #2c3e50;"></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="card" style="background: #f8f9fa; border: none; border-radius: 10px;">
+                            <div class="card-body p-3">
+                                <h6 class="text-muted mb-3" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <i class="fas fa-clock me-2"></i>Waktu Pendaftaran
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Dibuat</small>
+                                        <strong id="detail_created" style="color: #2c3e50;"></strong>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Terakhir Diupdate</small>
+                                        <strong id="detail_updated" style="color: #2c3e50;"></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border: none;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 8px;">
+                    <i class="fas fa-times me-1"></i>Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -490,6 +606,52 @@ function editKendaraan(id, platNomor, jenis, warna, pemilik) {
     
     // Tampilkan modal
     new bootstrap.Modal(document.getElementById('modalEditKendaraan')).show();
+}
+// Show detail kendaraan
+function showDetail(id, platNomor, jenis, warna, pemilik, createdAt, updatedAt) {
+    // Set data ke modal
+    document.getElementById('detail_plat_nomor').textContent = platNomor;
+    document.getElementById('detail_plat').textContent = platNomor;
+    document.getElementById('detail_warna').textContent = warna ? ucfirst(warna) : '-';
+    document.getElementById('detail_pemilik').textContent = pemilik;
+    document.getElementById('detail_id_user').textContent = '#' + id;
+    
+    // Format tanggal
+    document.getElementById('detail_created').textContent = formatDate(createdAt);
+    document.getElementById('detail_updated').textContent = formatDate(updatedAt);
+    
+    // Set badge jenis
+    const jenisElement = document.getElementById('detail_jenis');
+    const jenisTextElement = document.getElementById('detail_jenis_text');
+    
+    if (jenis === 'motor') {
+        jenisElement.className = 'badge-jenis badge-motor';
+        jenisElement.innerHTML = '<i class="fas fa-motorcycle me-1"></i>Motor';
+        jenisTextElement.textContent = 'Sepeda Motor';
+    } else if (jenis === 'mobil') {
+        jenisElement.className = 'badge-jenis badge-mobil';
+        jenisElement.innerHTML = '<i class="fas fa-car me-1"></i>Mobil';
+        jenisTextElement.textContent = 'Mobil';
+    } else {
+        jenisElement.className = 'badge-jenis badge-lainnya';
+        jenisElement.innerHTML = '<i class="fas fa-truck me-1"></i>Lainnya';
+        jenisTextElement.textContent = 'Lainnya';
+    }
+    
+    // Tampilkan modal
+    new bootstrap.Modal(document.getElementById('modalDetailKendaraan')).show();
+}
+
+// Helper function untuk ucfirst
+function ucfirst(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Helper function untuk format tanggal
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return date.toLocaleDateString('id-ID', options);
 }
 
 // Success message
