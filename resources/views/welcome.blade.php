@@ -7,39 +7,40 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2c3e50 50%, #34495e 100%);
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
             min-height: 100vh;
-            color: #ffffff;
             display: flex;
             align-items: center;
         }
         .badge-update {
-            background: linear-gradient(to right, #3498db, #2980b9);
-            color: #ffffff;
+            background: #ffffff;
+            color: #1e40af;
             font-size: 0.75rem;
             font-weight: bold;
             letter-spacing: 1px;
             padding: 6px 16px;
             border-radius: 50px;
             display: inline-block;
-            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+            border: 1px solid #93c5fd;
         }
         .text-gradient {
-            background: linear-gradient(to right, #3498db, #5dade2);
+            background: linear-gradient(to right, #1e40af, #1d4ed8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-weight: 900;
         }
         .login-card {
-            background: rgba(44, 62, 80, 0.95);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(52, 152, 219, 0.3);
+            background: #ffffff;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid #e2e8f0;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 10px 15px rgba(0,0,0,0.03);
         }
         .btn-login-main {
-            background: linear-gradient(to right, #3498db, #2980b9);
+            background: #2563eb;
             color: #ffffff;
             border: none;
             border-radius: 12px;
@@ -54,13 +55,13 @@
             justify-content: center;
             gap: 10px;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
         }
         .btn-login-main:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.6);
+            box-shadow: 0 8px 12px rgba(37, 99, 235, 0.4);
             color: #ffffff;
-            background: linear-gradient(to right, #5dade2, #3498db);
+            background: #1e40af;
         }
         .btn-login-main .arrow {
             font-size: 1.5rem;
@@ -70,26 +71,48 @@
             transform: translateX(5px);
         }
         .info-box {
-            background: rgba(52, 73, 94, 0.6);
-            border: 1px solid rgba(52, 152, 219, 0.3);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
         }
         .info-box p {
-            color: #bdc3c7;
+            color: #1e40af;
             font-size: 0.85rem;
             margin: 0;
             text-align: center;
+            font-weight: 500;
         }
-        .text-muted {
-            color: #95a5a6 !important;
+        .welcome-title {
+            color: #0f172a !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            font-weight: 800 !important;
+            line-height: 1.2;
         }
-        .fw-bold {
-            color: #ecf0f1;
+        .welcome-desc {
+            color: #0f172a !important;
+            font-weight: 600 !important;
+            line-height: 1.7;
+            font-size: 1.05rem;
         }
-        h3.fw-bold {
-            color: #ffffff;
+        .feature-item {
+            color: #0f172a;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #93c5fd;
+        }
+        .card-title {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+        .card-subtitle {
+            color: #475569 !important;
+        }
+        .footer-text {
+            color: #475569 !important;
         }
     </style>
 </head>
@@ -102,18 +125,16 @@
                 <div class="mb-4">
                     <span class="badge-update text-uppercase">Welcome</span>
                 </div>
-                <h1 class="display-4 fw-black mb-3 text-white">
+                <h1 class="display-4 fw-bold mb-3 welcome-title">
                     Sistem <span class="text-gradient">Smart Parkir</span>
                 </h1>
-                <p class="lead text-gray-300 fw-light lh-base mb-4" style="color: #cbd5e1;">
+                <p class="lead mb-4 welcome-desc">
                     Manajemen perparkiran modern digital. Mengamankan kendaraan, mencatat transaksi otomatis, dan memantau kapasitas area secara real-time dengan efisiensi penuh.
                 </p>
-                <div class="d-flex gap-3 text-secondary small pt-2">
-                    <span>⚡ Fast Access</span>
-                    <span>•</span>
-                    <span>🛡️ Secure Auth</span>
-                    <span>•</span>
-                    <span>📊 Real-time</span>
+                <div class="d-flex gap-3 small pt-2">
+                    <span class="feature-item">⚡ Fast Access</span>
+                    <span class="feature-item">🛡️ Secure Auth</span>
+                    <span class="feature-item">📊 Real-time</span>
                 </div>
             </div>
 
@@ -123,8 +144,8 @@
                         <div class="mb-3">
                             <span style="font-size: 4rem;">🔐</span>
                         </div>
-                        <h3 class="fw-bold text-white mb-2">Selamat Datang</h3>
-                        <p class="text-muted small mb-0">Silakan login untuk mengakses sistem</p>
+                        <h3 class="fw-bold mb-2 card-title">Selamat Datang</h3>
+                        <p class="small mb-0 card-subtitle">Silakan login untuk mengakses sistem</p>
                     </div>
 
                     <!-- SATU TOMBOL LOGIN UNTUK SEMUA ROLE -->
@@ -142,7 +163,7 @@
                     </div>
 
                     <div class="text-center mt-4">
-                        <small class="text-muted">
+                        <small class="footer-text">
                             © {{ date('Y') }} Smart Parkir System. All rights reserved.
                         </small>
                     </div>

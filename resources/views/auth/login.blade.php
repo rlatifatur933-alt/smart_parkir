@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2c3e50 50%, #34495e 100%);
-            color: #ffffff;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: #1e293b;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
@@ -18,14 +18,14 @@
             padding: 20px;
         }
         .login-box {
-            background: rgba(44, 62, 80, 0.95);
-            backdrop-filter: blur(10px);
+            background: #ffffff;
+            backdrop-filter: blur(20px);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 10px 15px rgba(0,0,0,0.03);
             width: 100%;
             max-width: 400px;
-            border: 1px solid rgba(52, 152, 219, 0.3);
+            border: 1px solid #e2e8f0;
         }
         .login-header {
             text-align: center;
@@ -34,13 +34,13 @@
         .login-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            border-radius: 50%;
+            background: #3b82f6;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
         }
         .login-icon i {
             font-size: 2.5rem;
@@ -49,13 +49,13 @@
         h3 {
             text-align: center;
             margin-bottom: 10px;
-            color: #ffffff;
+            color: #1e293b;
             font-weight: 700;
             font-size: 1.8rem;
         }
         .login-subtitle {
             text-align: center;
-            color: #bdc3c7;
+            color: #64748b;
             font-size: 0.9rem;
             margin-bottom: 30px;
         }
@@ -66,57 +66,57 @@
             display: block;
             margin-bottom: 8px;
             font-size: 14px;
-            color: #ecf0f1;
+            color: #475569;
             font-weight: 500;
         }
         input {
             width: 100%;
             padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(52, 152, 219, 0.3);
-            background-color: rgba(30, 58, 95, 0.5);
-            color: #ffffff;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            background-color: #f8fafc;
+            color: #1e293b;
             box-sizing: border-box;
             font-size: 14px;
             transition: all 0.3s;
         }
         input:focus {
             outline: none;
-            border-color: #3498db;
-            background-color: rgba(30, 58, 95, 0.8);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            border-color: #3b82f6;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
         input::placeholder {
-            color: #95a5a6;
+            color: #94a3b8;
         }
         button {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: #3b82f6;
             color: #ffffff;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
             margin-top: 10px;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
         }
         button:hover {
-            background: linear-gradient(135deg, #5dade2, #3498db);
+            background: #2563eb;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
         }
         button:active {
             transform: translateY(0);
         }
         .error-msg {
-            color: #e74c3c;
-            background-color: rgba(231, 76, 60, 0.1);
-            border: 1px solid rgba(231, 76, 60, 0.3);
+            color: #dc2626;
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
             padding: 12px;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 13px;
             margin-bottom: 20px;
             text-align: center;
@@ -125,13 +125,13 @@
             display: block;
             text-align: center;
             margin-top: 20px;
-            color: #95a5a6;
+            color: #64748b;
             text-decoration: none;
             font-size: 13px;
             transition: color 0.3s;
         }
         .back-link:hover {
-            color: #3498db;
+            color: #3b82f6;
         }
         .back-link i {
             margin-right: 5px;

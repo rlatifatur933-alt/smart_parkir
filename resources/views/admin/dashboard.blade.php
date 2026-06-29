@@ -132,7 +132,7 @@
         <h5 class="mb-0">
             <i class="fas fa-history me-2"></i>Transaksi Terakhir
         </h5>
-        <a href="{{ route('admin.log.index') }}" class="btn btn-primary btn-sm">
+        <a href="{{ route('admin.kendaraan.index') }}" class="btn btn-primary btn-sm">
             🔍 Lihat Semua
         </a>
     </div>

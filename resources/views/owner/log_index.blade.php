@@ -246,16 +246,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col-md-12">
-                <h2><i class="fas fa-wallet me-2"></i>Log Aktivitas Pemasukan</h2>
-                <p>Pantau semua transaksi dan pemasukan parkir secara real-time</p>
-            </div>
-        </div>
-    </div>
-
     <!-- Statistik Cards -->
     <div class="row">
         <div class="col-md-3">

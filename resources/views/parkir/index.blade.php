@@ -381,9 +381,8 @@
                                     </td>
                                     <td>
                                         @php
-                                            $masuk = \Carbon\Carbon::parse($transaksi->waktu_masuk);
-                                            $sekarang = \Carbon\Carbon::now();
-                                            $menitTotal = $masuk->diffInMinutes($sekarang);
+                                            $waktuMasuk = \Carbon\Carbon::parse($transaksi->waktu_masuk);
+                                            $menitTotal = $waktuMasuk->diffInMinutes(\Carbon\Carbon::now());
                                             $jam = floor($menitTotal / 60);
                                             $menit = $menitTotal % 60;
                                             
@@ -398,7 +397,9 @@
                                                 $color = '#e74c3c';
                                             }
                                         @endphp
-                                        <span style="color: {{ $color }}; font-weight: 600;">
+                                        <span class="durasi-text" 
+                                            data-waktu-masuk="{{ $waktuMasuk->format('Y-m-d H:i:s') }}" 
+                                            style="color: {{ $color }}; font-weight: 600;">
                                             {{ $durasiText }}
                                         </span>
                                     </td>
@@ -549,6 +550,47 @@ document.getElementById('formParkirMasuk').addEventListener('submit', function(e
         btn.innerHTML = originalText;
         btn.disabled = false;
     });
+});
+
+// Fungsi untuk update durasi secara real-time
+function updateDurasi() {
+    const durasiElements = document.querySelectorAll('.durasi-text');
+    
+    durasiElements.forEach(element => {
+        const waktuMasukStr = element.getAttribute('data-waktu-masuk');
+        const waktuMasuk = new Date(waktuMasukStr.replace(' ', 'T'));
+        const sekarang = new Date();
+        
+        const diffMs = sekarang - waktuMasuk;
+        const menitTotal = Math.floor(diffMs / 60000); // konversi ms ke menit
+        const jam = Math.floor(menitTotal / 60);
+        const menit = menitTotal % 60;
+        
+        let durasiText;
+        let color;
+        
+        if(jam < 1) {
+            durasiText = menit + ' mnt';
+            color = '#27ae60';
+        } else if(jam < 2) {
+            durasiText = jam + 'j ' + menit + 'm';
+            color = '#f39c12';
+        } else {
+            durasiText = jam + 'j ' + menit + 'm';
+            color = '#e74c3c';
+        }
+        
+        element.textContent = durasiText;
+        element.style.color = color;
+    });
+}
+
+// Update durasi setiap 30 detik
+setInterval(updateDurasi, 30000);
+
+// Update durasi segera setelah halaman load
+document.addEventListener('DOMContentLoaded', function() {
+    updateDurasi();
 });
 
 // Fungsi Konfirmasi Keluar

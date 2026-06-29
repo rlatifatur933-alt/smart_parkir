@@ -31,13 +31,19 @@
             </div>
             
             <!-- Search Box -->
-            <div class="search-box" style="margin: 0;">
-                <i class="bi bi-search"></i>
-                <input type="text" id="searchInput" placeholder="Cari nama, username, atau role..." style="width: 100%; max-width: 100%;">
-            </div>
-            <div id="searchInfo" class="search-info">
-                <i class="bi bi-info-circle"></i>
-                Menampilkan <strong id="visibleCount">0</strong> dari <strong id="totalCount">{{ count($semuaUser) }}</strong> user
+            <!-- Search Box -->
+            <div class="search-wrapper" style="display: flex; gap: 10px; align-items: center; margin: 0;">
+                <div class="search-icon-wrapper" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: white; padding: 12px 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(2, 132, 199, 0.2);">
+                    <i class="fas fa-search" style="font-size: 1.2rem;"></i>
+                </div>
+                <div class="search-box" style="flex: 1; margin: 0; position: relative;">
+                    <input type="text" id="searchInput" placeholder="Cari nama, username, atau role..." 
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; transition: all 0.3s;">
+                </div>
+                <div id="searchInfo" class="search-info">
+                    <i class="bi bi-info-circle"></i>
+                    Menampilkan <strong id="visibleCount">0</strong> dari <strong id="totalCount">{{ count($semuaUser) }}</strong> user
+                </div>
             </div>
         </div>
 
@@ -140,34 +146,49 @@
         background-color: #f8fafc !important;
     }
 
+    .search-wrapper {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin: 0;
+    }
+
+    .search-icon-wrapper {
+        background: linear-gradient(135deg, #0284c7, #0369a1);
+        color: white;
+        padding: 12px 15px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px rgba(2, 132, 199, 0.2);
+        flex-shrink: 0;
+    }
+
+    .search-icon-wrapper i {
+        font-size: 1.2rem;
+    }
+
     .search-box {
+        flex: 1;
         position: relative;
-        margin-bottom: 20px;
+        margin: 0;
     }
 
     .search-box input {
-        padding-left: 40px;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
         width: 100%;
-        max-width: 350px;
-        padding: 10px 15px 10px 40px;
+        padding: 12px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
         transition: all 0.3s;
+        background: white;
     }
 
     .search-box input:focus {
         outline: none;
         border-color: #0284c7;
-        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
-    }
-
-    .search-box i {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #95a5a6;
-        font-size: 1rem;
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
     }
 
     .search-info {
@@ -179,6 +200,17 @@
 
     .search-info.show {
         display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .search-wrapper {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .search-icon-wrapper {
+            justify-content: center;
+        }
     }
 </style>
 @endsection

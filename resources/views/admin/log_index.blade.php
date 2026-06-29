@@ -307,20 +307,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Header -->
-    <div class="log-header">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h2><i class="fas fa-history me-2"></i>Log Aktivitas Sistem</h2>
-                <p>Pantau semua aktivitas yang terjadi di sistem Smart Parkir</p>
-            </div>
-            <div class="col-md-4 text-end">
-                <a href="{{ route('admin.log.index') }}" class="btn btn-light btn-refresh">
-                    <i class="fas fa-sync-alt me-1"></i>Refresh Data
-                </a>
-            </div>
-        </div>
-    </div>
 
     <!-- Statistik Cards -->
     <div class="row">
@@ -392,7 +378,7 @@
                 </div>
                 <div class="col-md-3 d-flex align-items-end gap-2">
                     <button type="submit" class="btn btn-filter flex-grow-1">
-                        <i class="fas fa-search me-1"></i>Terapkan Filter
+                        <i class="fas fa-search me-1"></i> Terapkan
                     </button>
                     <a href="{{ route('admin.log.index') }}" class="btn btn-reset">
                         <i class="fas fa-times"></i>
