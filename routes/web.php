@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\AuthController;
 use App\Models\User;
@@ -52,7 +53,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         return view('admin.user_create');
     })->name('admin.user.create');
 
-    Route::post('/admin/user', function (\Illuminate\Http\Request $request) {
+    Route::post('/admin/user', function (Request $request) {
 
         $validated = $request->validate([
             'nama_lengkap' => 'required|string|max:100',
@@ -66,7 +67,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         \App\Models\User::create([
             'nama_lengkap' => $validated['nama_lengkap'],
             'username'     => $validated['username'],
-            'password'     => \Hash::make($validated['password']), 
+            'password'     => Hash::make($validated['password']), 
             'role'         => $validated['role'],
             'status_aktif' => 1, 
         ]);
@@ -79,7 +80,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         return view('admin.user_edit', compact('user'));
     })->name('admin.user.edit');
 
-    Route::put('/admin/user/{id}', function (\Illuminate\Http\Request $request, $id) {
+    Route::put('/admin/user/{id}', function (Request $request, $id) {
         $user = User::where('id_user', $id)->firstOrFail();
         
         $user->update([
@@ -91,7 +92,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
         if ($request->filled('password')) {
             $user->update([
-                'password' => \Hash::make($request->password)
+                'password' => Hash::make($request->password)
             ]);
         }
 
@@ -114,12 +115,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         return view('admin.tarif_index', compact('tarif'));
     })->name('admin.tarif.index');
 
-    Route::post('/admin/tarif', function (\Illuminate\Http\Request $request) {
+    Route::post('/admin/tarif', function (Request $request) {
         Tarif::create($request->all());
         return redirect('/admin/tarif')->with('sukses', 'Tarif berhasil ditambah!');
     })->name('admin.tarif.store');
 
-    Route::put('/admin/tarif/{id}', function (\Illuminate\Http\Request $request, $id) {
+    Route::put('/admin/tarif/{id}', function (Request $request, $id) {
         $tarif = Tarif::where('id_tarif', $id)->firstOrFail();
         
         $validated = $request->validate([
@@ -172,7 +173,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         return view('admin.area_index', compact('areaStats'));
     })->name('admin.area.index');
     
-    Route::post('/admin/area', function (\Illuminate\Http\Request $request) {
+    Route::post('/admin/area', function (Request $request) {
         AreaParkir::create([
             'nama_area' => $request->nama_area,
             'kapasitas' => $request->kapasitas,
@@ -181,7 +182,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         return redirect('/admin/area')->with('sukses', 'Area parkir berhasil ditambahkan!');
     })->name('admin.area.store');
     
-    Route::put('/admin/area/{id}', function (\Illuminate\Http\Request $request, $id) {
+    Route::put('/admin/area/{id}', function (Request $request, $id) {
         $area = AreaParkir::where('id_area', $id)->firstOrFail();
         
         $validated = $request->validate([
@@ -294,7 +295,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         ));
     })->name('admin.kendaraan.detail');
     
-    Route::post('/admin/kendaraan', function (\Illuminate\Http\Request $request) {
+    Route::post('/admin/kendaraan', function (Request $request) {
         Kendaraan::create([
             'plat_nomor'      => $request->plat_nomor,
             'jenis_kendaraan' => $request->jenis_kendaraan,
@@ -306,7 +307,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         return redirect()->back()->with('sukses', 'Data kendaraan berhasil ditambah!');
     })->name('admin.kendaraan.store');
 
-    Route::put('/admin/kendaraan/{id}', function (\Illuminate\Http\Request $request, $id) {
+    Route::put('/admin/kendaraan/{id}', function (Request $request, $id) {
         $kendaraan = Kendaraan::where('id_kendaraan', $id)->firstOrFail();
         
         $validated = $request->validate([
