@@ -18,6 +18,11 @@
             --primary-color: #34495e;
             --secondary-color: #2c3e50;
             --accent-color: #3498db;
+            --sidebar-bg: #ffffff;
+            --sidebar-hover: #f8f9fa;
+            --sidebar-active: #3498db;
+            --sidebar-text: #2c3e50;
+            --sidebar-text-muted: #6c757d;
         }
         
         body {
@@ -27,49 +32,52 @@
         
         .sidebar {
             min-height: 100vh;
-            background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            background-color: var(--sidebar-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
             position: fixed;
             width: 250px;
             left: 0;
             top: 0;
             z-index: 1000;
+            border-right: 1px solid #e9ecef;
         }
         
         .sidebar-brand {
             font-size: 24px;
             font-weight: 700;
-            color: #fff;
+            color: var(--sidebar-active);
             text-align: center;
             padding: 25px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 2px solid #f0f0f0;
         }
         
         .sidebar-brand i {
             margin-right: 10px;
+            color: var(--sidebar-active);
         }
         
         .user-panel {
-            background-color: rgba(255,255,255,0.1);
+            background-color: #f8f9fa;
             padding: 20px;
             text-align: center;
             margin: 20px;
             border-radius: 10px;
+            border: 1px solid #e9ecef;
         }
         
         .user-panel i {
-            color: #fff;
+            color: var(--sidebar-active);
             margin-bottom: 10px;
         }
         
         .user-panel h6 {
-            color: #fff;
+            color: var(--sidebar-text);
             margin: 5px 0;
             font-weight: 600;
         }
         
         .user-panel small {
-            color: rgba(255,255,255,0.7);
+            color: var(--sidebar-text-muted);
         }
         
         .nav-custom {
@@ -77,26 +85,38 @@
         }
         
         .nav-custom .nav-link {
-            color: rgba(255,255,255,0.8);
+            color: var(--sidebar-text);
             padding: 12px 15px;
             margin-bottom: 5px;
             border-radius: 8px;
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            font-weight: 500;
         }
         
-        .nav-custom .nav-link:hover,
+        .nav-custom .nav-link:hover {
+            background-color: var(--sidebar-hover);
+            color: var(--sidebar-text);
+            transform: translateX(5px);
+        }
+        
         .nav-custom .nav-link.active {
-            background-color: rgba(255,255,255,0.15);
+            background-color: var(--sidebar-active);
             color: #fff;
             transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
         }
         
         .nav-custom .nav-link i {
             margin-right: 12px;
             width: 20px;
             text-align: center;
+            font-size: 16px;
+        }
+        
+        .nav-custom .nav-link.active i {
+            color: #fff;
         }
         
         .main-content {
@@ -196,6 +216,33 @@
             font-weight: 600;
             font-size: 12px;
         }
+        
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef !important;
+        }
+        
+        .btn-logout {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%);
+            color: white;
+        }
     </style>
     
     @yield('styles')
@@ -269,10 +316,10 @@
             @endif
 
             <!-- Logout Button dengan Styling Gradient -->
-            <div class="sidebar-footer mt-auto p-3 border-top border-secondary">
+            <div class="sidebar-footer mt-auto p-3">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-danger w-100">
+                    <button type="submit" class="btn btn-logout w-100">
                         <i class="fas fa-power-off me-2"></i>Logout
                     </button>
                 </form>

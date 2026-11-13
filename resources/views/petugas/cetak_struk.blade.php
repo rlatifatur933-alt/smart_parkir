@@ -125,26 +125,49 @@
             opacity: 0.9;
         }
         
+        /* ==========================================
+           PRINT STYLES - HANYA CETAK STRUK SAJA
+           ========================================== */
         @media print {
+            /* Hilangkan margin default browser */
             @page {
-                margin: 0;
+                margin: 5mm;
                 size: auto;
             }
             
+            /* Reset body agar tidak ada background atau padding berlebih */
             body {
-                background: white;
-                padding: 0;
-                margin: 0;
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+            
+            /* Sembunyikan SEMUA elemen kecuali struk-container */
+            body > *:not(.struk-container) {
+                display: none !important;
             }
             
             .buttons {
                 display: none !important;
             }
             
+            /* Optimalkan tampilan struk saat dicetak */
             .struk-container {
-                box-shadow: none;
-                max-width: 100%;
-                padding: 15px;
+                box-shadow: none !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                padding: 10px !important;
+                margin: 0 !important;
+                border: none !important;
+                background: white !important;
+            }
+            
+            /* Pastikan warna tercetak (untuk printer warna) */
+            .total .amount {
+                color: #000 !important; /* Hitam agar jelas di printer thermal */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
@@ -208,5 +231,12 @@
         <a href="{{ route('petugas.dashboard') }}" class="btn btn-secondary">← Tutup</a>
         <button onclick="window.print()" class="btn btn-primary">🖨️ Cetak Struk</button>
     </div>
+
+    <script>
+        // Opsional: Auto print saat halaman dibuka (hapus komentar jika ingin otomatis)
+        // window.onload = function() {
+        //     window.print();
+        // }
+    </script>
 </body>
 </html>

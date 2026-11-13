@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #6366f1;
-            --secondary-color: #8b5cf6;
-            --accent-color: #a855f7;
+            --primary-blue: #2563eb;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --dark-blue: #1e40af;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
         }
         
         * {
@@ -22,19 +25,19 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow-x: hidden;
+            background: #ffffff;
         }
         
         /* Navbar */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             padding: 1rem 0;
         }
         
         .navbar-brand {
             font-weight: 700;
-            color: var(--primary-color);
+            color: var(--primary-blue);
             font-size: 1.5rem;
             display: flex;
             align-items: center;
@@ -42,18 +45,26 @@
         }
         
         .nav-link {
-            color: #475569;
+            color: var(--text-gray);
             font-weight: 500;
             margin-left: 2rem;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            padding: 8px 16px;
+            border-radius: 8px;
         }
         
         .nav-link:hover {
-            color: var(--primary-color);
+            color: var(--primary-blue);
+            background-color: var(--light-blue);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-blue);
+            background-color: var(--light-blue);
         }
         
         .btn-nav {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: var(--primary-blue);
             color: white;
             padding: 10px 24px;
             border-radius: 8px;
@@ -63,60 +74,45 @@
         }
         
         .btn-nav:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+            background: var(--dark-blue);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
         }
         
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, #f5f3ff 0%, #e0e7ff 50%, #dbeafe 100%);
-            min-height: 100vh;
-            padding: 100px 0 60px;
+            background: #ffffff;
+            padding: 120px 0 80px;
             position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
         }
         
         .hero-badge {
             display: inline-block;
-            background: white;
-            color: var(--primary-color);
+            background: var(--light-blue);
+            color: var(--primary-blue);
             padding: 8px 20px;
             border-radius: 50px;
             font-weight: 600;
             font-size: 0.875rem;
             margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         
         .hero-title {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
             line-height: 1.2;
             margin-bottom: 1.5rem;
-            color: #1e293b;
+            color: var(--text-dark);
         }
         
         .hero-title span {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-blue);
         }
         
         .hero-subtitle {
             font-size: 1.125rem;
-            color: #64748b;
+            color: var(--text-gray);
             line-height: 1.8;
             margin-bottom: 2rem;
         }
@@ -128,7 +124,7 @@
         }
         
         .btn-primary-custom {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: var(--primary-blue);
             color: white;
             padding: 14px 32px;
             border-radius: 12px;
@@ -142,104 +138,76 @@
         }
         
         .btn-primary-custom:hover {
+            background: var(--dark-blue);
             transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 12px 28px rgba(37, 99, 235, 0.3);
             color: white;
         }
         
         .btn-secondary-custom {
             background: white;
-            color: var(--primary-color);
+            color: var(--primary-blue);
             padding: 14px 32px;
             border-radius: 12px;
             font-weight: 600;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--light-blue);
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
         }
         
         .btn-secondary-custom:hover {
-            border-color: var(--primary-color);
-            background: #f8fafc;
-            color: var(--primary-color);
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+            color: var(--primary-blue);
         }
         
         .hero-features {
             display: flex;
             gap: 2rem;
-            margin-top: 2rem;
         }
         
         .feature-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #475569;
+            color: var(--text-gray);
             font-weight: 500;
         }
         
         .feature-item i {
-            color: var(--primary-color);
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            color: var(--primary-blue);
         }
         
         /* Stats Section */
         .stats-section {
+            background: linear-gradient(135deg, var(--light-blue) 0%, #ffffff 100%);
             padding: 60px 0;
-            background: white;
         }
         
-        .stat-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            padding: 30px;
-            border-radius: 16px;
+        .stat-item {
             text-align: center;
-            border: 2px solid #e2e8f0;
-            transition: all 0.3s;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
-            border-color: var(--primary-color);
-        }
-        
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            color: white;
-            font-size: 1.5rem;
+            padding: 20px;
         }
         
         .stat-number {
             font-size: 2.5rem;
             font-weight: 800;
-            color: var(--primary-color);
+            color: var(--primary-blue);
             margin-bottom: 5px;
         }
         
         .stat-label {
-            color: #64748b;
+            color: var(--text-gray);
             font-size: 0.95rem;
-            font-weight: 500;
         }
         
-        /* Features Section */
-        .features-section {
+        /* How It Works */
+        .how-it-works {
             padding: 100px 0;
-            background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+            background: #ffffff;
         }
         
         .section-title {
@@ -250,21 +218,68 @@
         .section-title h2 {
             font-size: 2.5rem;
             font-weight: 800;
-            color: #1e293b;
+            color: var(--text-dark);
             margin-bottom: 1rem;
         }
         
         .section-title p {
             font-size: 1.125rem;
-            color: #64748b;
+            color: var(--text-gray);
             max-width: 600px;
             margin: 0 auto;
         }
         
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+        .step-card {
+            text-align: center;
+            padding: 40px 30px;
+            background: white;
+            border-radius: 20px;
+            border: 2px solid #f1f5f9;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+            border-color: var(--light-blue);
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+        
+        .step-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .step-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+        
+        .step-card p {
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+        
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background: #f8fafc;
         }
         
         .feature-card {
@@ -277,14 +292,14 @@
         
         .feature-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 16px 32px rgba(0,0,0,0.08);
-            border-color: var(--primary-color);
+            box-shadow: 0 16px 32px rgba(37, 99, 235, 0.1);
+            border-color: var(--primary-blue);
         }
         
         .feature-icon {
             width: 64px;
             height: 64px;
-            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
+            background: var(--light-blue);
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -296,67 +311,59 @@
         .feature-card h3 {
             font-size: 1.25rem;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--text-dark);
             margin-bottom: 12px;
         }
         
         .feature-card p {
-            color: #64748b;
+            color: var(--text-gray);
             line-height: 1.7;
             margin: 0;
         }
         
-        /* About Section */
-        .about-section {
+        /* CTA Section */
+        .cta-section {
             padding: 100px 0;
-            background: white;
-        }
-        
-        .about-icon-box {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
             color: white;
-            flex-shrink: 0;
-        }
-        
-        /* Trust Section */
-        .trust-section {
-            padding: 60px 0;
-            background: white;
             text-align: center;
         }
         
-        .trust-section p {
-            color: #64748b;
-            font-weight: 600;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .trust-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
-            flex-wrap: wrap;
-            opacity: 0.6;
-        }
-        
-        .trust-logos i {
+        .cta-section h2 {
             font-size: 2.5rem;
-            color: #94a3b8;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .btn-cta {
+            background: white;
+            color: var(--primary-blue);
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            color: var(--primary-blue);
         }
         
         /* Footer */
         .footer {
-            background: #0f172a;
+            background: var(--text-dark);
             color: white;
             padding: 40px 0;
             text-align: center;
@@ -364,7 +371,12 @@
         
         .footer p {
             margin: 0;
-            color: #94a3b8;
+            opacity: 0.8;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
         
         /* Responsive */
@@ -399,13 +411,13 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="#home">Beranda</a>
+                        <a class="nav-link active" href="#home">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-it-works">Cara Kerja</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#features">Fitur</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">Tentang</a>
                     </li>
                     <li class="nav-item ms-3">
                         <a class="btn btn-nav" href="{{ route('login') }}">
@@ -426,16 +438,15 @@
                         Kelola Parkir dengan <span>Smart & Efisien</span>
                     </h1>
                     <p class="hero-subtitle">
-                        Sistem manajemen perparkiran terintegrasi dengan teknologi AI. 
                         Pantau kapasitas real-time, catat transaksi otomatis, dan tingkatkan 
-                        efisiensi operasional parkir Anda.
+                        efisiensi operasional parkir Anda dengan teknologi terkini.
                     </p>
                     <div class="hero-buttons">
                         <a href="{{ route('login') }}" class="btn btn-primary-custom">
                             <i class="fas fa-rocket"></i>
                             Mulai Sekarang
                         </a>
-                        <a href="#about" class="btn btn-secondary-custom">
+                        <a href="#how-it-works" class="btn btn-secondary-custom">
                             <i class="fas fa-play-circle"></i>
                             Pelajari Lebih
                         </a>
@@ -456,8 +467,69 @@
                     </div>
                 </div>
                 <div class="col-lg-6 text-center">
-                    <div style="font-size: 20rem; opacity: 0.8; animation: float 3s ease-in-out infinite;">
-                        🅿️
+                    <div style="animation: float 3s ease-in-out infinite;">
+                        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background Circle -->
+                            <circle cx="200" cy="200" r="180" fill="#dbeafe" opacity="0.5"/>
+                            
+                            <!-- Parking Sign -->
+                            <rect x="80" y="40" width="10" height="120" rx="5" fill="#2563eb"/>
+                            <rect x="50" y="20" width="70" height="70" rx="12" fill="#2563eb"/>
+                            <text x="85" y="68" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="white" text-anchor="middle">P</text>
+                            
+                            <!-- Car -->
+                            <rect x="150" y="220" width="180" height="70" rx="15" fill="#2563eb"/>
+                            <path d="M 175 220 L 200 170 L 290 170 L 315 220 Z" fill="#3b82f6"/>
+                            <path d="M 185 210 L 205 180 L 240 180 L 240 210 Z" fill="white" opacity="0.9"/>
+                            <path d="M 250 210 L 250 180 L 285 180 L 305 210 Z" fill="white" opacity="0.9"/>
+                            <circle cx="190" cy="290" r="25" fill="#1e293b"/>
+                            <circle cx="190" cy="290" r="15" fill="#64748b"/>
+                            <circle cx="290" cy="290" r="25" fill="#1e293b"/>
+                            <circle cx="290" cy="290" r="15" fill="#64748b"/>
+                            <circle cx="170" cy="250" r="10" fill="#fbbf24"/>
+                            <circle cx="310" cy="250" r="10" fill="#fbbf24"/>
+                            
+                            <!-- Decorative Elements -->
+                            <circle cx="100" cy="350" r="8" fill="#3b82f6" opacity="0.6"/>
+                            <circle cx="320" cy="100" r="12" fill="#3b82f6" opacity="0.6"/>
+                            <circle cx="350" cy="300" r="10" fill="#3b82f6" opacity="0.6"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>Cara Kerja Sistem</h2>
+                <p>Tiga langkah mudah untuk mengelola parkir Anda</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">🚗</div>
+                        <h3>Kendaraan Masuk</h3>
+                        <p>Catat kendaraan masuk dengan input plat nomor, jenis kendaraan, dan area parkir yang tersedia.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">⏱️</div>
+                        <h3>Parkir & Monitor</h3>
+                        <p>Pantau durasi parkir secara real-time dan kapasitas area yang tersedia.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">💳</div>
+                        <h3>Proses Keluar</h3>
+                        <p>Sistem otomatis menghitung durasi dan biaya parkir. Cetak struk pembayaran.</p>
                     </div>
                 </div>
             </div>
@@ -468,126 +540,45 @@
     <section class="features-section" id="features">
         <div class="container">
             <div class="section-title">
-                <h2>Fitur Unggulan Smart Parkir</h2>
-                <p>Semua yang Anda butuhkan untuk mengelola area parkir dengan efisien dan profesional</p>
+                <h2>Fitur Unggulan</h2>
+                <p>Semua yang Anda butuhkan untuk mengelola area parkir</p>
             </div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🚗</div>
-                    <h3>Kendaraan Masuk/Keluar</h3>
-                    <p>Catat setiap kendaraan yang masuk dan keluar secara otomatis dengan sistem yang cepat dan akurat.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Real-time Monitoring</h3>
-                    <p>Pantau kapasitas area parkir secara real-time dengan dashboard yang informatif dan mudah dipahami.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Kalkulasi Otomatis</h3>
-                    <p>Hitung biaya parkir secara otomatis berdasarkan durasi dan tarif yang telah ditentukan.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Keamanan Terjamin</h3>
-                    <p>Sistem autentikasi multi-role dengan enkripsi password untuk keamanan data Anda.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"></div>
-                    <h3>Responsive Design</h3>
-                    <p>Akses sistem dari berbagai perangkat - desktop, tablet, atau smartphone dengan mudah.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3>Laporan Lengkap</h3>
-                    <p>Generate laporan transaksi, pendapatan, dan aktivitas parkir secara detail dan akurat.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about-section" id="about">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="hero-badge">
-                        <i class="fas fa-info-circle me-2"></i>Tentang Kami
-                    </div>
-                    <h2 style="font-size: 2.5rem; font-weight: 800; color: #1e293b; margin-bottom: 1.5rem;">
-                        Solusi Parkir <span style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Terdepan</span> untuk Indonesia
-                    </h2>
-                    <p style="color: #64748b; line-height: 1.8; margin-bottom: 2rem;">
-                        Smart Parkir adalah sistem manajemen parkir modern yang dirancang untuk memudahkan 
-                        pengelolaan area parkir di berbagai instansi seperti mall, rumah sakit, perkantoran, 
-                        dan tempat publik lainnya.
-                    </p>
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div style="display: flex; gap: 15px; align-items: flex-start;">
-                                <div class="about-icon-box">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div>
-                                    <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 5px;">Terpercaya</h4>
-                                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Telah melayani ribuan kendaraan setiap harinya</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div style="display: flex; gap: 15px; align-items: flex-start;">
-                                <div class="about-icon-box">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <div>
-                                    <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 5px;">Aman</h4>
-                                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Sistem keamanan data terenkripsi</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div style="display: flex; gap: 15px; align-items: flex-start;">
-                                <div class="about-icon-box">
-                                    <i class="fas fa-bolt"></i>
-                                </div>
-                                <div>
-                                    <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 5px;">Cepat</h4>
-                                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Proses transaksi dalam hitungan detik</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div style="display: flex; gap: 15px; align-items: flex-start;">
-                                <div class="about-icon-box">
-                                    <i class="fas fa-headset"></i>
-                                </div>
-                                <div>
-                                    <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 5px;">Support 24/7</h4>
-                                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Tim support siap membantu kapan saja</p>
-                                </div>
-                            </div>
-                        </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Real-time Monitoring</h3>
+                        <p>Pantau kapasitas area parkir secara real-time dengan dashboard yang informatif.</p>
                     </div>
                 </div>
-                <div class="col-lg-6 text-center">
-                    <div style="font-size: 15rem; opacity: 0.6;">
-                        🏢
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3>Kalkulasi Otomatis</h3>
+                        <p>Hitung biaya parkir otomatis berdasarkan durasi dan tarif yang ditentukan.</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Trust Section -->
-    <section class="trust-section">
-        <div class="container">
-            <p>Dipercaya oleh berbagai instansi dan pengelola parkir</p>
-            <div class="trust-logos">
-                <i class="fas fa-building"></i>
-                <i class="fas fa-university"></i>
-                <i class="fas fa-hospital"></i>
-                <i class="fas fa-shopping-mall"></i>
-                <i class="fas fa-plane"></i>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Keamanan Terjamin</h3>
+                        <p>Sistem autentikasi multi-role dengan enkripsi untuk keamanan data.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>Laporan Lengkap</h3>
+                        <p>Generate laporan transaksi, pendapatan, dan aktivitas parkir detail.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon"></div>
+                        <h3>Fast Access</h3>
+                        <p>Proses transaksi cepat dalam hitungan detik untuk efisiensi maksimal.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -615,27 +606,26 @@
             });
         });
         
-        // Animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Update active menu saat scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
         
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
                 }
             });
-        }, observerOptions);
-        
-        // Observe all cards
-        document.querySelectorAll('.stat-card, .feature-card').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'all 0.6s ease-out';
-            observer.observe(el);
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
         });
     </script>
 </body>
